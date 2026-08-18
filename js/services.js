@@ -344,8 +344,8 @@ window.MAGNUM_SERVICE_GROUPS = [
 ];
 
 (() => {
-  const root = document.querySelector("[data-service-list]");
-  if (!root) return;
+  const index = document.querySelector("[data-svc-index]");
+  if (!index) return;
 
   const doodles = {
     yapi: `<img class="doodle-art" src="assets/montaj.png" alt="" width="680" height="520" />`,
@@ -356,22 +356,54 @@ window.MAGNUM_SERVICE_GROUPS = [
     doga: `<svg viewBox="0 0 240 180"><path d="M120 158V48"/><path d="M120 70C86 70 70 48 70 48s8 40 50 48"/><path d="M120 86c34 0 50-22 50-22s-8 40-50 48"/><path class="accent" d="M120 48C96 28 84 22 84 22s4 28 36 40"/><circle cx="148" cy="118" r="5"/><path d="M148 123v18"/></svg>`,
   };
 
-  root.replaceChildren(
-    ...window.MAGNUM_SERVICE_GROUPS.map((group, index) => {
-      const article = document.createElement("article");
-      article.className = index % 2 ? "service-row is-flip" : "service-row";
-      article.innerHTML = `
-        <div class="doodle" aria-hidden="true">${doodles[group.doodle] || doodles.yapi}</div>
-        <div class="service-copy">
-          <span class="wm">${group.n}</span>
-          <span class="kicker">${group.n}</span>
+  const groups = window.MAGNUM_SERVICE_GROUPS;
+
+  index.replaceChildren(
+    ...groups.map((group, i) => {
+      const row = document.createElement("div");
+      row.className = "svc-row";
+      row.dataset.i = String(i);
+      row.innerHTML = `
+        <span class="svc-n">${group.n}</span>
+        <div>
           <h3>${group.title}</h3>
-          <p class="dek">${group.dek}</p>
-          <p>${group.text}</p>
-          <ul>${group.items.map((item) => `<li><a href="hizmet.html#${item.slug}">${item.label}</a></li>`).join("")}</ul>
+          <p>${group.dek}</p>
+          <ul class="svc-links">${group.items
+            .map((item) => `<li><a href="hizmet.html#${item.slug}">${item.label}</a></li>`)
+            .join("")}</ul>
         </div>`;
-      return article;
+      return row;
     })
   );
+
+  const stage = document.querySelector("[data-svc-stage]");
+  const art = document.querySelector("[data-svc-art]");
+  const meta = document.querySelector("[data-svc-meta]");
+  if (!stage || !art || !meta) return;
+
+  const rows = [...index.querySelectorAll(".svc-row")];
+  let current = -1;
+
+  const paint = (i) => {
+    if (i === current) return;
+    current = i;
+    const group = groups[i];
+    art.innerHTML = doodles[group.doodle] || doodles.yapi;
+    meta.innerHTML = `
+      <strong>${group.title}</strong>
+      <p class="mono" style="color: var(--accent); margin: 0">${group.n} · ${group.dek}</p>
+      <ul>${group.items.map((item) => `<li>${item.label}</li>`).join("")}</ul>`;
+    rows.forEach((row, ri) => row.classList.toggle("is-on", ri === i));
+
+    stage.classList.add("svc-fade");
+    requestAnimationFrame(() => stage.classList.remove("svc-fade"));
+  };
+
+  rows.forEach((row, i) => {
+    row.addEventListener("mouseenter", () => paint(i));
+    row.addEventListener("focusin", () => paint(i));
+  });
+
+  paint(0);
 })();
 

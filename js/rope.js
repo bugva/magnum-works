@@ -5,6 +5,9 @@
   const GRAVITY = 0.42;
   const DAMPING = 0.984;
   const WIND = 0.085;
+  const RETURN_K = 0.00075;
+  const EDGE_BOUNCE = 0.4;
+  const SLACK_SEG = 3;
   const KNOT_IDS = ["referanslar", "hizmetler", "surec", "isler", "sss", "hakkimizda", "iletisim"];
 
   const canvas = document.createElement("canvas");
@@ -14,6 +17,7 @@
   const ctx = canvas.getContext("2d");
 
   const mouse = { x: 0, y: 0, active: false };
+  const grab = { x: 0, y: 0, active: false };
   let tug = { y: 0, active: false };
   let dpr = 1;
   let lastScroll = window.scrollY;
@@ -22,14 +26,16 @@
   let points = [];
   let activeId = "";
 
-  const isNight = () => document.documentElement.dataset.theme === "night";
-  const anchorX = () => (window.innerWidth < 760 ? 16 : 28);
+  const isDay = () => document.documentElement.dataset.theme === "day";
+  const anchorX = () => (window.innerWidth < 760 ? 18 : 34);
   const pageHeight = () => Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
   const makePoint = (x, y) => ({ x, y, ox: x, oy: y });
 
   const rebuild = () => {
     const height = pageHeight();
-    const count = Math.max(24, Math.ceil(height / SEG) + 2);
+    // Payı olan ip: fazladan segment ipin hafifçe sarkmasına ve
+    // kıvrılmasına izin verir, gergin tel gibi durmaz.
+    const count = Math.max(24, Math.ceil(height / SEG) + SLACK_SEG);
     const x = anchorX();
     if (!points.length) {
       for (let i = 0; i < count; i += 1) points.push(makePoint(x, 8 + i * SEG));
@@ -85,6 +91,8 @@
     const wind = Math.sin(time * 0.012) * WIND + Math.sin(time * 0.037) * WIND * 0.45;
     scrollForce *= 0.9;
 
+    const rest = anchorX();
+
     for (let i = 1; i < points.length; i += 1) {
       const p = points[i];
       const vx = (p.x - p.ox) * DAMPING;
@@ -94,12 +102,17 @@
       p.x += vx + wind + scrollForce;
       p.y += vy + GRAVITY;
 
+      // Çapa kolonuna doğru çok yumuşak bir yay: yakında etkisi rüzgârın
+      // altında kalır (salınım bozulmaz), uzakta ip sağda asılı kalmadan
+      // kendi ağırlığıyla savrularak geri döner.
+      p.x += (rest - p.x) * RETURN_K;
+
       if (!reduceMotion && tug.active) {
         const near = 1 - Math.min(Math.abs(p.y - tug.y) / 160, 1);
         if (near > 0) p.x -= near * 0.35;
       }
 
-      if (mouse.active) {
+      if (mouse.active && !grab.active) {
         const dx = p.x - mouse.x;
         const dy = p.y - mouse.y;
         const d2 = dx * dx + dy * dy;
@@ -109,8 +122,39 @@
           p.y += dy * f;
         }
       }
+
+      // Tutulan bölge imleci takip eder; bırakınca ip kendi hızıyla savrulur.
+      if (grab.active) {
+        const near = 1 - Math.min(Math.abs(p.y - grab.y) / 150, 1);
+        if (near > 0) {
+          p.x += (grab.x - p.x) * near * 0.34;
+          p.y += (grab.y - p.y) * near * 0.1;
+        }
+      }
     }
+
     constrain();
+    clampToScreen();
+  };
+
+  // İp hiçbir zaman ekran dışına taşmasın: sol/sağ kenarda yumuşak sınır.
+  // Kenara çarpan nokta hızının bir kısmını içeri doğru geri alır; böylece
+  // duvara yapışıp kalmaz.
+  const clampToScreen = () => {
+    const minX = 3;
+    const maxX = window.innerWidth - 3;
+    for (let i = 1; i < points.length; i += 1) {
+      const p = points[i];
+      if (p.x < minX) {
+        const v = p.x - p.ox;
+        p.x = minX;
+        p.ox = minX + (v < 0 ? v * EDGE_BOUNCE : 0);
+      } else if (p.x > maxX) {
+        const v = p.x - p.ox;
+        p.x = maxX;
+        p.ox = maxX + (v > 0 ? v * EDGE_BOUNCE : 0);
+      }
+    }
   };
 
   const pointAtY = (y) => {
@@ -139,8 +183,8 @@
     activeId = current;
   };
 
-  const drawRope = (night) => {
-    if (points.length < 2) return;
+  // Gövde eğrisi: kaba çokgen yerine yumuşak kavis.
+  const traceCore = () => {
     ctx.beginPath();
     ctx.moveTo(points[0].x, points[0].y);
     for (let i = 1; i < points.length - 1; i += 1) {
@@ -149,60 +193,78 @@
       ctx.quadraticCurveTo(c.x, c.y, (c.x + n.x) * 0.5, (c.y + n.y) * 0.5);
     }
     ctx.lineTo(points[points.length - 1].x, points[points.length - 1].y);
+  };
 
-    if (night) {
-      ctx.shadowColor = "rgba(255, 140, 60, 0.85)";
-      ctx.shadowBlur = 14;
-      ctx.strokeStyle = "#ea580c";
-      ctx.lineWidth = 3.4;
-      ctx.stroke();
-      ctx.shadowBlur = 0;
-      ctx.strokeStyle = "rgba(255, 220, 170, 0.7)";
-      ctx.lineWidth = 1.2;
-      ctx.stroke();
-      return;
-    }
+  // Tek parça halat: aynı eğri üzerine koyu kenar, gövde ve orta parlama.
+  const drawRope = (day) => {
+    if (points.length < 2) return;
 
-    ctx.strokeStyle = "rgba(12, 13, 14, 0.22)";
-    ctx.lineWidth = 6.5;
+    traceCore();
+    ctx.strokeStyle = day ? "rgba(10, 12, 14, 0.2)" : "rgba(0, 0, 0, 0.5)";
+    ctx.lineWidth = 6.4;
     ctx.stroke();
-    ctx.strokeStyle = "#c2410c";
-    ctx.lineWidth = 3.1;
+
+    traceCore();
+    ctx.strokeStyle = day ? "#c2410c" : "#ff5a1f";
+    ctx.lineWidth = 4;
     ctx.stroke();
-    ctx.strokeStyle = "rgba(255, 196, 140, 0.55)";
-    ctx.lineWidth = 1.15;
+
+    traceCore();
+    ctx.strokeStyle = day ? "rgba(255, 255, 255, 0.38)" : "rgba(255, 214, 176, 0.42)";
+    ctx.lineWidth = 1.1;
     ctx.stroke();
   };
 
-  const drawKnots = (night) => {
+  // Tepede karabina: ipin bir yere asılı olduğunu belli eder.
+  const drawAnchor = (day) => {
+    const p = points[0];
+    const metal = day ? "#3f4247" : "#c9ccd1";
+    ctx.lineWidth = 2.2;
+    ctx.strokeStyle = metal;
+
+    ctx.beginPath();
+    ctx.ellipse(p.x, p.y + 12, 6.5, 11, 0, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(p.x - 6.5, p.y + 7);
+    ctx.lineTo(p.x + 6.5, p.y + 16);
+    ctx.lineWidth = 1.4;
+    ctx.stroke();
+  };
+
+  const drawKnots = (day) => {
     KNOT_IDS.forEach((id) => {
       const el = document.getElementById(id);
       if (!el) return;
       const y = el.getBoundingClientRect().top + window.scrollY + 18;
+      if (y < window.scrollY - 40 || y > window.scrollY + window.innerHeight + 40) return;
+
       const p = pointAtY(y);
       const on = id === activeId;
+      const r = on ? 6 : 4;
+
       ctx.beginPath();
-      ctx.arc(p.x, p.y, on ? 6.5 : 4.5, 0, Math.PI * 2);
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = night ? "#fdba74" : "#c2410c";
-      if (on) {
-        ctx.fillStyle = night ? "#fdba74" : "#c2410c";
-        ctx.fill();
-      }
+      ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+      ctx.fillStyle = day ? "#c2410c" : "#ff5a1f";
+      ctx.strokeStyle = day ? "#8a2f0d" : "rgba(255, 214, 176, 0.7)";
+      ctx.lineWidth = 1.4;
+      ctx.fill();
       ctx.stroke();
     });
   };
 
   const draw = () => {
-    const night = isNight();
+    const day = isDay();
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
     ctx.save();
     ctx.translate(0, -window.scrollY);
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
-    drawRope(night);
-    drawKnots(night);
+    drawRope(day);
+    drawAnchor(day);
+    drawKnots(day);
     ctx.restore();
   };
 
@@ -232,7 +294,7 @@
     });
   };
 
-  document.querySelectorAll(".service-row").forEach(bindTug);
+  document.querySelectorAll(".svc-row, .work-row").forEach(bindTug);
   document.querySelectorAll(".nav a, .nav-drop-btn").forEach(bindTug);
 
   window.addEventListener(
@@ -256,6 +318,54 @@
   });
   window.addEventListener("resize", sizeCanvas);
   new ResizeObserver(() => rebuild()).observe(document.body);
+
+  /* ---------- Halatı tutup sallama ---------- */
+
+  const finePointer = window.matchMedia("(pointer: fine)").matches;
+  const GRAB_RANGE = 46;
+
+  const nearRope = (clientX, clientY) => {
+    const p = pointAtY(clientY + window.scrollY);
+    return Math.abs(clientX - p.x) < GRAB_RANGE;
+  };
+
+  if (finePointer) {
+    window.addEventListener("pointermove", (event) => {
+      if (grab.active) {
+        grab.x = event.clientX;
+        grab.y = event.clientY + window.scrollY;
+        return;
+      }
+      document.body.classList.toggle("is-rope-near", nearRope(event.clientX, event.clientY));
+    });
+
+    window.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0 || !nearRope(event.clientX, event.clientY)) return;
+      grab.active = true;
+      grab.x = event.clientX;
+      grab.y = event.clientY + window.scrollY;
+      document.body.classList.add("is-rope-held");
+    });
+
+    const release = () => {
+      grab.active = false;
+      document.body.classList.remove("is-rope-held");
+    };
+
+    window.addEventListener("pointerup", release);
+    window.addEventListener("pointercancel", release);
+    window.addEventListener("blur", release);
+
+    // Çift tık: ipe sert bir savurma.
+    window.addEventListener("dblclick", (event) => {
+      if (!nearRope(event.clientX, event.clientY)) return;
+      const at = event.clientY + window.scrollY;
+      points.forEach((p) => {
+        const near = 1 - Math.min(Math.abs(p.y - at) / 320, 1);
+        if (near > 0) p.x += near * 26;
+      });
+    });
+  }
 
   sizeCanvas();
   requestAnimationFrame(tick);
