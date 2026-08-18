@@ -1,24 +1,25 @@
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const finePointer = window.matchMedia("(pointer: fine)").matches;
 
-const header = document.querySelector(".site-header");
-const toggle = document.querySelector(".menu-toggle");
+const header = document.querySelector(".hdr");
+const burger = document.querySelector(".burger");
 const nav = document.querySelector(".nav");
-const progress = document.querySelector(".scroll-progress");
+const progress = document.querySelector(".progress");
 const toTop = document.querySelector(".to-top");
-const navLinks = [...document.querySelectorAll(".nav a[href^='#']")];
 const dropBtn = document.querySelector(".nav-drop-btn");
 const drop = document.querySelector(".nav-drop");
+const navLinks = [...document.querySelectorAll(".nav a[href^='#']")];
 
-/* ---------- Mobile menu ---------- */
+/* ---------- Mobil menü ---------- */
 
 const closeMenu = () => {
   nav?.classList.remove("is-open");
-  toggle?.setAttribute("aria-expanded", "false");
+  burger?.setAttribute("aria-expanded", "false");
 };
 
-toggle?.addEventListener("click", () => {
+burger?.addEventListener("click", () => {
   const open = nav.classList.toggle("is-open");
-  toggle.setAttribute("aria-expanded", String(open));
+  burger.setAttribute("aria-expanded", String(open));
 });
 
 nav?.querySelectorAll("a").forEach((link) =>
@@ -44,38 +45,88 @@ document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") closeMenu();
 });
 
-/* ---------- Scroll driven header, progress, parallax ---------- */
+/* ---------- Tehlike şeridi içeriği ---------- */
 
-const heroPhoto = document.querySelector(".hero-photo");
-const heroCenter = document.querySelector(".hero-center");
-const drifters = [...document.querySelectorAll(".wm, .facts-n")];
+const tape = document.querySelector("[data-tape]");
+
+if (tape) {
+  const words = [
+    "Endüstriyel dağcılık",
+    "İple erişim",
+    "Cephe temizliği",
+    "Rüzgar türbini",
+    "Yaşam hattı",
+    "Sahne rigging",
+    "Kaya bariyeri",
+    "Arama kurtarma",
+    "Restorasyon",
+    "Yüksekte çalışma eğitimi",
+  ];
+  const run = [...words, ...words];
+  tape.replaceChildren(
+    ...run.map((word) => {
+      const span = document.createElement("span");
+      span.textContent = word;
+      return span;
+    })
+  );
+}
+
+/* ---------- Kaydırmaya bağlı: başlık, ilerleme, parallax, iniş rayı ---------- */
+
+const heroMedia = document.querySelector(".hero-media img");
+const depthOut = document.querySelector("[data-depth]");
+const railList = document.querySelector("[data-rail]");
+
+const railSections = [
+  ["nedir", "Nedir"],
+  ["hizmetler", "Hizmetler"],
+  ["surec", "Süreç"],
+  ["isler", "İşler"],
+  ["referanslar", "Referanslar"],
+  ["hakkimizda", "Hakkımızda"],
+  ["sss", "SSS"],
+  ["iletisim", "İletişim"],
+].filter(([id]) => document.getElementById(id));
+
+if (railList) {
+  railList.replaceChildren(
+    ...railSections.map(([id, label]) => {
+      const li = document.createElement("li");
+      li.dataset.for = id;
+      li.title = label;
+      return li;
+    })
+  );
+}
+
+const railMarks = railList ? [...railList.children] : [];
 
 let ticking = false;
 
 const onScroll = () => {
   const y = window.scrollY;
   const max = document.documentElement.scrollHeight - window.innerHeight;
+  const ratio = max > 0 ? Math.min(y / max, 1) : 0;
 
-  header?.classList.toggle("is-stuck", y > 40 || document.body.classList.contains("page-inner"));
+  header?.classList.toggle("is-stuck", y > 30 || document.body.classList.contains("page-inner"));
   toTop?.classList.toggle("is-visible", y > window.innerHeight * 0.7);
+  progress?.style.setProperty("--progress", String(ratio));
 
-  if (progress) {
-    progress.style.setProperty("--progress", max > 0 ? String(Math.min(y / max, 1)) : "0");
+  if (depthOut) depthOut.textContent = String(Math.round(ratio * 100));
+
+  if (!reduceMotion && heroMedia && y <= window.innerHeight * 1.2) {
+    heroMedia.style.transform = `translate3d(0, ${(y * 0.22).toFixed(1)}px, 0) scale(1.08)`;
   }
 
-  if (!reduceMotion && heroPhoto && y <= window.innerHeight) {
-    heroPhoto.style.transform = `translateY(${(y * 0.24).toFixed(1)}px) scale(1.06)`;
-    heroCenter.style.transform = `translateY(${(y * 0.1).toFixed(1)}px)`;
-    heroCenter.style.opacity = String(Math.max(1 - y / (window.innerHeight * 0.75), 0));
-  }
-
-  if (!reduceMotion) {
-    drifters.forEach((el) => {
-      const rect = el.getBoundingClientRect();
-      if (rect.bottom < 0 || rect.top > window.innerHeight) return;
-      const t = (rect.top + rect.height / 2 - window.innerHeight / 2) / window.innerHeight;
-      el.style.transform = `translateY(${(t * 34).toFixed(1)}px)`;
+  if (railMarks.length) {
+    const mid = y + window.innerHeight * 0.42;
+    let activeIndex = -1;
+    railSections.forEach(([id], i) => {
+      const el = document.getElementById(id);
+      if (el && el.offsetTop <= mid) activeIndex = i;
     });
+    railMarks.forEach((mark, i) => mark.classList.toggle("is-on", i === activeIndex));
   }
 
   ticking = false;
@@ -91,7 +142,7 @@ window.addEventListener("scroll", requestScroll, { passive: true });
 window.addEventListener("resize", requestScroll);
 onScroll();
 
-/* ---------- Reveal on scroll ---------- */
+/* ---------- Kaydırdıkça ortaya çıkma ---------- */
 
 const revealTargets = document.querySelectorAll("[data-reveal]");
 
@@ -106,13 +157,13 @@ if (reduceMotion || !("IntersectionObserver" in window)) {
         revealObserver.unobserve(entry.target);
       });
     },
-    { rootMargin: "0px 0px -12% 0px", threshold: 0.15 }
+    { rootMargin: "0px 0px -10% 0px", threshold: 0.12 }
   );
 
   revealTargets.forEach((el) => revealObserver.observe(el));
 }
 
-/* ---------- Counters ---------- */
+/* ---------- Sayaçlar ---------- */
 
 const counters = document.querySelectorAll("[data-count]");
 
@@ -123,17 +174,16 @@ const runCounter = (el) => {
     return;
   }
 
-  const duration = 1100;
+  const duration = 1300;
   const start = performance.now();
 
-  const step = (now) => {
+  const tick = (now) => {
     const t = Math.min((now - start) / duration, 1);
-    const eased = 1 - Math.pow(1 - t, 3);
-    el.textContent = String(Math.round(target * eased));
-    if (t < 1) requestAnimationFrame(step);
+    el.textContent = String(Math.round(target * (1 - Math.pow(1 - t, 3))));
+    if (t < 1) requestAnimationFrame(tick);
   };
 
-  requestAnimationFrame(step);
+  requestAnimationFrame(tick);
 };
 
 if ("IntersectionObserver" in window) {
@@ -145,7 +195,7 @@ if ("IntersectionObserver" in window) {
         counterObserver.unobserve(entry.target);
       });
     },
-    { threshold: 0.6 }
+    { threshold: 0.5 }
   );
 
   counters.forEach((el) => counterObserver.observe(el));
@@ -153,7 +203,43 @@ if ("IntersectionObserver" in window) {
   counters.forEach(runCounter);
 }
 
-/* ---------- Active section in nav ---------- */
+/* ---------- Rakam ikonlarının çizgi çizim animasyonu ---------- */
+
+const statCards = [...document.querySelectorAll(".stat")];
+
+if (statCards.length) {
+  const shapesOf = (card) => [...card.querySelectorAll(".stat-ico path, .stat-ico circle, .stat-ico rect")];
+
+  statCards.forEach((card) => {
+    if (reduceMotion) return;
+    shapesOf(card).forEach((shape, i) => {
+      shape.setAttribute("pathLength", "1");
+      shape.style.strokeDasharray = "1";
+      shape.style.strokeDashoffset = "1";
+      shape.style.transition = `stroke-dashoffset 1s cubic-bezier(0.22, 1, 0.36, 1) ${(i * 0.11).toFixed(2)}s`;
+    });
+  });
+
+  const draw = (card) => shapesOf(card).forEach((shape) => (shape.style.strokeDashoffset = "0"));
+
+  if (reduceMotion || !("IntersectionObserver" in window)) {
+    statCards.forEach(draw);
+  } else {
+    const drawObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          draw(entry.target);
+          drawObserver.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.45 }
+    );
+    statCards.forEach((card) => drawObserver.observe(card));
+  }
+}
+
+/* ---------- Aktif bölüm ---------- */
 
 const sections = navLinks
   .map((link) => document.querySelector(link.getAttribute("href")))
@@ -177,29 +263,33 @@ if ("IntersectionObserver" in window && sections.length) {
   sections.forEach((section) => sectionObserver.observe(section));
 }
 
-/* ---------- Back to top ---------- */
+/* ---------- Başa dön ---------- */
 
 toTop?.addEventListener("click", () => {
   window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
 });
 
-/* ---------- Theme ---------- */
+/* ---------- Tema: koyu varsayılan, gündüz seçenekli ---------- */
 
 const themeBtn = document.querySelector(".theme-toggle");
+const themeLabel = document.querySelector("[data-theme-label]");
 
-const applyTheme = (night) => {
-  document.documentElement.dataset.theme = night ? "night" : "";
-  if (!night) document.documentElement.removeAttribute("data-theme");
-  themeBtn?.setAttribute("aria-pressed", String(night));
+const applyTheme = (day) => {
+  if (day) document.documentElement.dataset.theme = "day";
+  else document.documentElement.removeAttribute("data-theme");
+
+  themeBtn?.setAttribute("aria-pressed", String(day));
+  if (themeLabel) themeLabel.textContent = day ? "Gece görünümü" : "Gündüz görünümü";
+
   try {
-    localStorage.setItem("magnum-theme", night ? "night" : "day");
+    localStorage.setItem("magnum-theme", day ? "day" : "dark");
   } catch (err) {}
 };
 
 applyTheme(
   (() => {
     try {
-      return localStorage.getItem("magnum-theme") === "night";
+      return localStorage.getItem("magnum-theme") === "day";
     } catch (err) {
       return false;
     }
@@ -207,8 +297,10 @@ applyTheme(
 );
 
 themeBtn?.addEventListener("click", () => {
-  applyTheme(document.documentElement.dataset.theme !== "night");
+  applyTheme(document.documentElement.dataset.theme !== "day");
 });
+
+/* ---------- Form ---------- */
 
 const form = document.querySelector(".form");
 
@@ -224,17 +316,15 @@ form?.addEventListener("submit", (event) => {
   )}&body=${body}`;
 });
 
-/* ---------- Magnetic buttons ---------- */
-
-const finePointer = window.matchMedia("(pointer: fine)").matches;
+/* ---------- Manyetik düğmeler ---------- */
 
 if (!reduceMotion && finePointer) {
-  document.querySelectorAll(".btn, .quote-slab").forEach((el) => {
+  document.querySelectorAll(".btn").forEach((el) => {
     el.addEventListener("pointermove", (event) => {
       const rect = el.getBoundingClientRect();
       const dx = event.clientX - (rect.left + rect.width / 2);
       const dy = event.clientY - (rect.top + rect.height / 2);
-      el.style.transform = `translate(${(dx * 0.18).toFixed(1)}px, ${(dy * 0.22).toFixed(1)}px)`;
+      el.style.transform = `translate(${(dx * 0.16).toFixed(1)}px, ${(dy * 0.2).toFixed(1)}px)`;
     });
     el.addEventListener("pointerleave", () => {
       el.style.transform = "";
@@ -242,44 +332,40 @@ if (!reduceMotion && finePointer) {
   });
 }
 
-/* ---------- Stats icons stroke draw ---------- */
+/* ---------- İmleç halkası ---------- */
 
-const statArticles = [...document.querySelectorAll(".stats-grid article")];
+const ring = document.querySelector(".cursor-ring");
 
-if (statArticles.length) {
-  const statShapes = statArticles.map((article) => {
-    const shapes = [...article.querySelectorAll(".stats-ico path, .stats-ico circle, .stats-ico rect")];
-    shapes.forEach((shape, i) => {
-      shape.setAttribute("pathLength", "1");
-      if (!reduceMotion) {
-        shape.style.strokeDasharray = "1";
-        shape.style.strokeDashoffset = "1";
-        shape.style.transition = `stroke-dashoffset 1s cubic-bezier(0.22, 1, 0.36, 1) ${(i * 0.12).toFixed(2)}s`;
-      }
-    });
-    return shapes;
+if (ring && !reduceMotion && finePointer) {
+  let rx = -100;
+  let ry = -100;
+  let tx = -100;
+  let ty = -100;
+
+  window.addEventListener("pointermove", (event) => {
+    tx = event.clientX;
+    ty = event.clientY;
+    ring.classList.add("is-on");
   });
 
-  const drawAll = (i) => statShapes[i].forEach((shape) => (shape.style.strokeDashoffset = "0"));
+  document.addEventListener("pointerleave", () => ring.classList.remove("is-on"));
 
-  if (reduceMotion || !("IntersectionObserver" in window)) {
-    statArticles.forEach((_, i) => drawAll(i));
-  } else {
-    const drawObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          drawAll(statArticles.indexOf(entry.target));
-          drawObserver.unobserve(entry.target);
-        });
-      },
-      { threshold: 0.5 }
-    );
-    statArticles.forEach((article) => drawObserver.observe(article));
-  }
+  const follow = () => {
+    rx += (tx - rx) * 0.18;
+    ry += (ty - ry) * 0.18;
+    ring.style.transform = `translate3d(${rx.toFixed(1)}px, ${ry.toFixed(1)}px, 0)`;
+    requestAnimationFrame(follow);
+  };
+  requestAnimationFrame(follow);
+
+  const grow = "a, button, summary, .svc-row, input, textarea";
+  document.querySelectorAll(grow).forEach((el) => {
+    el.addEventListener("pointerenter", () => ring.classList.add("is-big"));
+    el.addEventListener("pointerleave", () => ring.classList.remove("is-big"));
+  });
 }
 
-/* ---------- Contact spotlight ---------- */
+/* ---------- İletişim bölümünde imleç ışıması ---------- */
 
 const contact = document.querySelector(".contact");
 
@@ -290,7 +376,5 @@ if (contact && !reduceMotion && finePointer) {
     contact.style.setProperty("--spot-y", `${(event.clientY - rect.top).toFixed(0)}px`);
     contact.style.setProperty("--spot-o", "1");
   });
-  contact.addEventListener("pointerleave", () => {
-    contact.style.setProperty("--spot-o", "0");
-  });
+  contact.addEventListener("pointerleave", () => contact.style.setProperty("--spot-o", "0"));
 }

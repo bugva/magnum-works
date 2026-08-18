@@ -52,11 +52,11 @@
       const next = services[(idx + 1) % services.length];
       pager.innerHTML = `
         <a class="pager-link is-prev" href="hizmet.html#${prev.slug}">
-          <span>← Önceki hizmet</span>
+          <span>← Önceki · ${prev.n}</span>
           <strong>${prev.title}</strong>
         </a>
         <a class="pager-link is-next" href="hizmet.html#${next.slug}">
-          <span>Sonraki hizmet →</span>
+          <span>Sonraki · ${next.n} →</span>
           <strong>${next.title}</strong>
         </a>`;
     }

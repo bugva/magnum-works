@@ -7,6 +7,9 @@
   const WIND = 0.085;
   const RETURN_K = 0.00075;
   const EDGE_BOUNCE = 0.4;
+  const SLACK_SEG = 10;
+  const TWIST = 21;
+  const TWIST_AMP = 2.4;
   const KNOT_IDS = ["referanslar", "hizmetler", "surec", "isler", "sss", "hakkimizda", "iletisim"];
 
   const canvas = document.createElement("canvas");
@@ -24,14 +27,16 @@
   let points = [];
   let activeId = "";
 
-  const isNight = () => document.documentElement.dataset.theme === "night";
-  const anchorX = () => (window.innerWidth < 760 ? 16 : 28);
+  const isDay = () => document.documentElement.dataset.theme === "day";
+  const anchorX = () => (window.innerWidth < 760 ? 18 : 34);
   const pageHeight = () => Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
   const makePoint = (x, y) => ({ x, y, ox: x, oy: y });
 
   const rebuild = () => {
     const height = pageHeight();
-    const count = Math.max(24, Math.ceil(height / SEG) + 2);
+    // Payı olan ip: fazladan segment ipin hafifçe sarkmasına ve
+    // kıvrılmasına izin verir, gergin tel gibi durmaz.
+    const count = Math.max(24, Math.ceil(height / SEG) + SLACK_SEG);
     const x = anchorX();
     if (!points.length) {
       for (let i = 0; i < count; i += 1) points.push(makePoint(x, 8 + i * SEG));
@@ -170,8 +175,8 @@
     activeId = current;
   };
 
-  const drawRope = (night) => {
-    if (points.length < 2) return;
+  // Gövde eğrisi: kaba çokgen yerine yumuşak kavis.
+  const traceCore = () => {
     ctx.beginPath();
     ctx.moveTo(points[0].x, points[0].y);
     for (let i = 1; i < points.length - 1; i += 1) {
@@ -180,60 +185,146 @@
       ctx.quadraticCurveTo(c.x, c.y, (c.x + n.x) * 0.5, (c.y + n.y) * 0.5);
     }
     ctx.lineTo(points[points.length - 1].x, points[points.length - 1].y);
+  };
 
-    if (night) {
-      ctx.shadowColor = "rgba(255, 140, 60, 0.85)";
-      ctx.shadowBlur = 14;
-      ctx.strokeStyle = "#ea580c";
-      ctx.lineWidth = 3.4;
-      ctx.stroke();
-      ctx.shadowBlur = 0;
-      ctx.strokeStyle = "rgba(255, 220, 170, 0.7)";
-      ctx.lineWidth = 1.2;
-      ctx.stroke();
-      return;
+  // Bükümlü tel: ip boyunca normal eksende sinüs salınımı yaparak
+  // sarmal görünümü verir.
+  const traceStrand = (phase) => {
+    ctx.beginPath();
+    let s = 0;
+    let started = false;
+    const top = window.scrollY - 40;
+    const bottom = window.scrollY + window.innerHeight + 40;
+
+    for (let i = 0; i < points.length; i += 1) {
+      const p = points[i];
+      const prev = points[i > 0 ? i - 1 : 0];
+      const next = points[i < points.length - 1 ? i + 1 : i];
+      if (i > 0) s += Math.hypot(p.x - prev.x, p.y - prev.y);
+
+      if (p.y < top || p.y > bottom) {
+        started = false;
+        continue;
+      }
+
+      const tx = next.x - prev.x;
+      const ty = next.y - prev.y;
+      const len = Math.hypot(tx, ty) || 1;
+      const off = Math.sin((s / TWIST) * Math.PI * 2 + phase) * TWIST_AMP;
+      const x = p.x - (ty / len) * off;
+      const y = p.y + (tx / len) * off;
+
+      if (!started) {
+        ctx.moveTo(x, y);
+        started = true;
+      } else {
+        ctx.lineTo(x, y);
+      }
     }
+  };
 
-    ctx.strokeStyle = "rgba(12, 13, 14, 0.22)";
-    ctx.lineWidth = 6.5;
+  const drawRope = (day) => {
+    if (points.length < 2) return;
+
+    // Gölge / kılıf
+    traceCore();
+    ctx.strokeStyle = day ? "rgba(10, 12, 14, 0.16)" : "rgba(0, 0, 0, 0.55)";
+    ctx.lineWidth = 8;
     ctx.stroke();
-    ctx.strokeStyle = "#c2410c";
-    ctx.lineWidth = 3.1;
+
+    // Çekirdek
+    traceCore();
+    ctx.strokeStyle = day ? "#8a2f0d" : "#5c2410";
+    ctx.lineWidth = 5.4;
     ctx.stroke();
-    ctx.strokeStyle = "rgba(255, 196, 140, 0.55)";
-    ctx.lineWidth = 1.15;
+
+    // Büküm telleri
+    traceStrand(0);
+    ctx.strokeStyle = "#ff5a1f";
+    ctx.lineWidth = 2.8;
+    ctx.stroke();
+
+    traceStrand(Math.PI);
+    ctx.strokeStyle = day ? "#c2410c" : "#f59e5b";
+    ctx.lineWidth = 2.4;
+    ctx.stroke();
+
+    // İnce parlama
+    traceStrand(Math.PI * 0.5);
+    ctx.strokeStyle = day ? "rgba(255, 255, 255, 0.5)" : "rgba(255, 226, 190, 0.55)";
+    ctx.lineWidth = 1;
     ctx.stroke();
   };
 
-  const drawKnots = (night) => {
+  // Tepede karabina: ipin bir yere asılı olduğunu belli eder.
+  const drawAnchor = (day) => {
+    const p = points[0];
+    const metal = day ? "#3f4247" : "#c9ccd1";
+    ctx.lineWidth = 2.2;
+    ctx.strokeStyle = metal;
+
+    ctx.beginPath();
+    ctx.ellipse(p.x, p.y + 12, 6.5, 11, 0, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(p.x - 6.5, p.y + 7);
+    ctx.lineTo(p.x + 6.5, p.y + 16);
+    ctx.lineWidth = 1.4;
+    ctx.stroke();
+  };
+
+  const drawKnots = (day) => {
     KNOT_IDS.forEach((id) => {
       const el = document.getElementById(id);
       if (!el) return;
       const y = el.getBoundingClientRect().top + window.scrollY + 18;
+      if (y < window.scrollY - 40 || y > window.scrollY + window.innerHeight + 40) return;
+
       const p = pointAtY(y);
       const on = id === activeId;
+      const r = on ? 7 : 5;
+
+      // Düğüm sargısı
       ctx.beginPath();
-      ctx.arc(p.x, p.y, on ? 6.5 : 4.5, 0, Math.PI * 2);
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = night ? "#fdba74" : "#c2410c";
-      if (on) {
-        ctx.fillStyle = night ? "#fdba74" : "#c2410c";
-        ctx.fill();
-      }
+      ctx.ellipse(p.x, p.y, r * 0.78, r, 0, 0, Math.PI * 2);
+      ctx.fillStyle = day ? "#8a2f0d" : "#5c2410";
+      ctx.fill();
+      ctx.lineWidth = 1.6;
+      ctx.strokeStyle = on ? "#ff5a1f" : day ? "#c2410c" : "#f59e5b";
       ctx.stroke();
+
+      // Sargı çizgileri
+      ctx.beginPath();
+      ctx.moveTo(p.x - r * 0.7, p.y - r * 0.35);
+      ctx.lineTo(p.x + r * 0.7, p.y - r * 0.35);
+      ctx.moveTo(p.x - r * 0.7, p.y + r * 0.35);
+      ctx.lineTo(p.x + r * 0.7, p.y + r * 0.35);
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = on ? "#ffd7c2" : day ? "rgba(255,255,255,0.45)" : "rgba(255, 226, 190, 0.4)";
+      ctx.stroke();
+
+      if (on) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, r + 5, 0, Math.PI * 2);
+        ctx.lineWidth = 1.2;
+        ctx.strokeStyle = "rgba(255, 90, 31, 0.5)";
+        ctx.stroke();
+      }
     });
   };
 
   const draw = () => {
-    const night = isNight();
+    const day = isDay();
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
     ctx.save();
     ctx.translate(0, -window.scrollY);
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
-    drawRope(night);
-    drawKnots(night);
+    drawRope(day);
+    drawAnchor(day);
+    drawKnots(day);
     ctx.restore();
   };
 
@@ -263,7 +354,7 @@
     });
   };
 
-  document.querySelectorAll(".service-row").forEach(bindTug);
+  document.querySelectorAll(".svc-row, .work-row").forEach(bindTug);
   document.querySelectorAll(".nav a, .nav-drop-btn").forEach(bindTug);
 
   window.addEventListener(

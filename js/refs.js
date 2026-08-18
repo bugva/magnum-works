@@ -46,38 +46,21 @@ window.MAGNUM_REFS = [
   const refs = (window.MAGNUM_REFS || []).filter((item) => item && item.name);
   if (!refs.length) return;
 
-  const card = (item, hidden) => {
+  const chip = (item, hidden) => {
     const li = document.createElement("li");
     if (hidden) li.setAttribute("aria-hidden", "true");
-    const article = document.createElement("article");
-    article.className = "refs-card";
-
-    const plate = document.createElement("div");
-    plate.className = "refs-plate";
-    if (item.src) {
-      const img = document.createElement("img");
-      img.className = "refs-logo";
-      img.src = item.src;
-      img.alt = hidden ? "" : item.name;
-      plate.append(img);
-    } else {
-      const slot = document.createElement("span");
-      slot.className = "refs-slot";
-      slot.textContent = "Logo";
-      plate.append(slot);
-    }
-
-    const name = document.createElement("p");
-    name.className = "refs-name";
-    name.textContent = item.name;
-
-    article.append(plate, name);
-    li.append(article);
+    const span = document.createElement("span");
+    span.className = "refs-chip";
+    span.textContent = item.name;
+    li.append(span);
     return li;
   };
 
   if (track) {
-    track.replaceChildren(...refs.map((item) => card(item, false)), ...refs.map((item) => card(item, true)));
+    track.replaceChildren(
+      ...refs.map((item) => chip(item, false)),
+      ...refs.map((item) => chip(item, true))
+    );
   }
 
   if (list) {
