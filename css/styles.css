@@ -620,6 +620,17 @@ button {
   padding: calc(var(--header-h) + 60px) 0 34px;
   overflow: hidden;
   isolation: isolate;
+
+  /* Fotoğrafın üzeri her iki temada da koyu kalır; içindeki tüm öğeler
+     bu yerel paletten beslendiği için gündüz modunda da okunur. */
+  --void: #08090a;
+  --bone: #f3f0eb;
+  --muted: rgba(243, 240, 235, 0.74);
+  --faint: rgba(243, 240, 235, 0.58);
+  --line: rgba(243, 240, 235, 0.14);
+  --line-mid: rgba(243, 240, 235, 0.26);
+  --line-hard: rgba(243, 240, 235, 0.42);
+  color: var(--bone);
 }
 
 .hero-media {
@@ -633,26 +644,24 @@ button {
   height: 100%;
   object-fit: cover;
   object-position: center 38%;
-  filter: contrast(1.04) saturate(1.06) brightness(0.88);
+  filter: contrast(1.04) saturate(1.06) brightness(0.86);
   transform: scale(1.08);
   will-change: transform;
 }
 
-html[data-theme="day"] .hero-media img {
-  filter: contrast(1.02) saturate(1.04);
-}
-
-/* Yalnızca yazının okunduğu yerde koyulaşan perde; fotoğrafın rengi kalır. */
+/* Perde yalnızca yazının oturduğu üst ve alt bantta koyulaşır; ortada
+   fotoğrafın rengi görünür. */
 .hero-media::after {
   content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(8, 9, 10, 0.5) 0%,
-    rgba(8, 9, 10, 0.12) 34%,
-    rgba(8, 9, 10, 0.62) 78%,
-    var(--void) 99%
+    rgba(8, 9, 10, 0.62) 0%,
+    rgba(8, 9, 10, 0.16) 32%,
+    rgba(8, 9, 10, 0.58) 66%,
+    rgba(8, 9, 10, 0.88) 92%,
+    rgba(8, 9, 10, 0.94) 100%
   );
 }
 
@@ -688,7 +697,7 @@ html[data-theme="day"] .hero-media img {
   text-transform: uppercase;
   margin: 0;
   max-width: 20ch;
-  text-shadow: 0 6px 26px rgba(0, 0, 0, 0.42);
+  text-shadow: 0 4px 22px rgba(0, 0, 0, 0.55), 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 .hero-title .ln {
