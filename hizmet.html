@@ -74,7 +74,7 @@
 
     <main id="icerik" class="service-page">
       <section class="section service-hero">
-        <div class="container">
+        <div class="container" data-reveal>
           <a class="back-link" href="index.html#hizmetler">Tüm hizmetler</a>
           <p class="kicker" data-n></p>
           <h1 data-title></h1>
@@ -84,8 +84,8 @@
 
       <section class="section service-body">
         <div class="container service-body-grid">
-          <article data-body></article>
-          <aside>
+          <article data-body data-reveal></article>
+          <aside data-reveal style="--d: 140ms">
             <ul data-items></ul>
             <a class="btn btn-primary" href="index.html#iletisim">Teklif al</a>
           </aside>
@@ -94,12 +94,16 @@
 
       <section class="section gallery" id="galeri" hidden>
         <div class="container">
-          <div class="split-intro">
+          <div class="split-intro" data-reveal>
             <p class="section-tag">Galeri</p>
             <h2>Sahadan</h2>
           </div>
           <div class="gallery-grid" data-gallery></div>
         </div>
+      </section>
+
+      <section class="service-pager-section" aria-label="Diğer hizmetler">
+        <div class="container service-pager" data-pager data-reveal></div>
       </section>
     </main>
 

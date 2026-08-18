@@ -360,6 +360,7 @@ window.MAGNUM_SERVICE_GROUPS = [
     ...window.MAGNUM_SERVICE_GROUPS.map((group, index) => {
       const article = document.createElement("article");
       article.className = index % 2 ? "service-row is-flip" : "service-row";
+      article.setAttribute("data-reveal", "");
       article.innerHTML = `
         <div class="doodle" aria-hidden="true">${doodles[group.doodle] || doodles.yapi}</div>
         <div class="service-copy">

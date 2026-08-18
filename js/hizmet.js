@@ -44,8 +44,27 @@
       gallerySection.hidden = true;
       gallery.innerHTML = "";
     }
+
+    const pager = document.querySelector("[data-pager]");
+    if (pager && services.length > 1) {
+      const idx = services.indexOf(service);
+      const prev = services[(idx - 1 + services.length) % services.length];
+      const next = services[(idx + 1) % services.length];
+      pager.innerHTML = `
+        <a class="pager-link is-prev" href="hizmet.html#${prev.slug}">
+          <span>← Önceki hizmet</span>
+          <strong>${prev.title}</strong>
+        </a>
+        <a class="pager-link is-next" href="hizmet.html#${next.slug}">
+          <span>Sonraki hizmet →</span>
+          <strong>${next.title}</strong>
+        </a>`;
+    }
   };
 
   render();
-  window.addEventListener("hashchange", render);
+  window.addEventListener("hashchange", () => {
+    render();
+    window.scrollTo({ top: 0, behavior: "auto" });
+  });
 })();

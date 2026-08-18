@@ -5,6 +5,8 @@
   const GRAVITY = 0.42;
   const DAMPING = 0.984;
   const WIND = 0.085;
+  const RETURN_K = 0.00075;
+  const EDGE_BOUNCE = 0.4;
   const KNOT_IDS = ["referanslar", "hizmetler", "surec", "isler", "sss", "hakkimizda", "iletisim"];
 
   const canvas = document.createElement("canvas");
@@ -85,6 +87,8 @@
     const wind = Math.sin(time * 0.012) * WIND + Math.sin(time * 0.037) * WIND * 0.45;
     scrollForce *= 0.9;
 
+    const rest = anchorX();
+
     for (let i = 1; i < points.length; i += 1) {
       const p = points[i];
       const vx = (p.x - p.ox) * DAMPING;
@@ -93,6 +97,11 @@
       p.oy = p.y;
       p.x += vx + wind + scrollForce;
       p.y += vy + GRAVITY;
+
+      // Çapa kolonuna doğru çok yumuşak bir yay: yakında etkisi rüzgârın
+      // altında kalır (salınım bozulmaz), uzakta ip sağda asılı kalmadan
+      // kendi ağırlığıyla savrularak geri döner.
+      p.x += (rest - p.x) * RETURN_K;
 
       if (!reduceMotion && tug.active) {
         const near = 1 - Math.min(Math.abs(p.y - tug.y) / 160, 1);
@@ -110,7 +119,29 @@
         }
       }
     }
+
     constrain();
+    clampToScreen();
+  };
+
+  // İp hiçbir zaman ekran dışına taşmasın: sol/sağ kenarda yumuşak sınır.
+  // Kenara çarpan nokta hızının bir kısmını içeri doğru geri alır; böylece
+  // duvara yapışıp kalmaz.
+  const clampToScreen = () => {
+    const minX = 3;
+    const maxX = window.innerWidth - 3;
+    for (let i = 1; i < points.length; i += 1) {
+      const p = points[i];
+      if (p.x < minX) {
+        const v = p.x - p.ox;
+        p.x = minX;
+        p.ox = minX + (v < 0 ? v * EDGE_BOUNCE : 0);
+      } else if (p.x > maxX) {
+        const v = p.x - p.ox;
+        p.x = maxX;
+        p.ox = maxX + (v > 0 ? v * EDGE_BOUNCE : 0);
+      }
+    }
   };
 
   const pointAtY = (y) => {
