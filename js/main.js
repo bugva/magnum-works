@@ -46,6 +46,10 @@ document.addEventListener("keydown", (event) => {
 
 /* ---------- Scroll driven header, progress, parallax ---------- */
 
+const heroPhoto = document.querySelector(".hero-photo");
+const heroCenter = document.querySelector(".hero-center");
+const drifters = [...document.querySelectorAll(".wm, .facts-n")];
+
 let ticking = false;
 
 const onScroll = () => {
@@ -57,6 +61,21 @@ const onScroll = () => {
 
   if (progress) {
     progress.style.setProperty("--progress", max > 0 ? String(Math.min(y / max, 1)) : "0");
+  }
+
+  if (!reduceMotion && heroPhoto && y <= window.innerHeight) {
+    heroPhoto.style.transform = `translateY(${(y * 0.24).toFixed(1)}px) scale(1.06)`;
+    heroCenter.style.transform = `translateY(${(y * 0.1).toFixed(1)}px)`;
+    heroCenter.style.opacity = String(Math.max(1 - y / (window.innerHeight * 0.75), 0));
+  }
+
+  if (!reduceMotion) {
+    drifters.forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+      const t = (rect.top + rect.height / 2 - window.innerHeight / 2) / window.innerHeight;
+      el.style.transform = `translateY(${(t * 34).toFixed(1)}px)`;
+    });
   }
 
   ticking = false;
@@ -204,3 +223,74 @@ form?.addEventListener("submit", (event) => {
     "Teklif talebi"
   )}&body=${body}`;
 });
+
+/* ---------- Magnetic buttons ---------- */
+
+const finePointer = window.matchMedia("(pointer: fine)").matches;
+
+if (!reduceMotion && finePointer) {
+  document.querySelectorAll(".btn, .quote-slab").forEach((el) => {
+    el.addEventListener("pointermove", (event) => {
+      const rect = el.getBoundingClientRect();
+      const dx = event.clientX - (rect.left + rect.width / 2);
+      const dy = event.clientY - (rect.top + rect.height / 2);
+      el.style.transform = `translate(${(dx * 0.18).toFixed(1)}px, ${(dy * 0.22).toFixed(1)}px)`;
+    });
+    el.addEventListener("pointerleave", () => {
+      el.style.transform = "";
+    });
+  });
+}
+
+/* ---------- Stats icons stroke draw ---------- */
+
+const statArticles = [...document.querySelectorAll(".stats-grid article")];
+
+if (statArticles.length) {
+  const statShapes = statArticles.map((article) => {
+    const shapes = [...article.querySelectorAll(".stats-ico path, .stats-ico circle, .stats-ico rect")];
+    shapes.forEach((shape, i) => {
+      shape.setAttribute("pathLength", "1");
+      if (!reduceMotion) {
+        shape.style.strokeDasharray = "1";
+        shape.style.strokeDashoffset = "1";
+        shape.style.transition = `stroke-dashoffset 1s cubic-bezier(0.22, 1, 0.36, 1) ${(i * 0.12).toFixed(2)}s`;
+      }
+    });
+    return shapes;
+  });
+
+  const drawAll = (i) => statShapes[i].forEach((shape) => (shape.style.strokeDashoffset = "0"));
+
+  if (reduceMotion || !("IntersectionObserver" in window)) {
+    statArticles.forEach((_, i) => drawAll(i));
+  } else {
+    const drawObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          drawAll(statArticles.indexOf(entry.target));
+          drawObserver.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.5 }
+    );
+    statArticles.forEach((article) => drawObserver.observe(article));
+  }
+}
+
+/* ---------- Contact spotlight ---------- */
+
+const contact = document.querySelector(".contact");
+
+if (contact && !reduceMotion && finePointer) {
+  contact.addEventListener("pointermove", (event) => {
+    const rect = contact.getBoundingClientRect();
+    contact.style.setProperty("--spot-x", `${(event.clientX - rect.left).toFixed(0)}px`);
+    contact.style.setProperty("--spot-y", `${(event.clientY - rect.top).toFixed(0)}px`);
+    contact.style.setProperty("--spot-o", "1");
+  });
+  contact.addEventListener("pointerleave", () => {
+    contact.style.setProperty("--spot-o", "0");
+  });
+}

@@ -83,23 +83,26 @@
           <h1 id="hero-title">Endüstriyel dağcılık.<br />İple erişim hizmetleri.</h1>
           <a class="btn btn-hero" href="#hizmetler">Tüm hizmetler</a>
         </div>
+        <a class="hero-cue" href="#nedir">
+          <span>Kaydır</span>
+        </a>
       </section>
 
-      <section class="facts" aria-label="Çalışma ilkeleri">
+      <section class="facts" id="nedir" aria-label="Çalışma ilkeleri">
         <div class="container facts-layout">
-          <h2 class="facts-lead">Nedir?</h2>
+          <h2 class="facts-lead" data-reveal>Nedir?</h2>
           <div class="facts-list">
-            <article>
+            <article data-reveal>
               <span class="facts-n" aria-hidden="true">01</span>
               <h3>Yöntem</h3>
               <p>Endüstriyel dağcılık, iple erişimdir. İskele veya vinç kurulmadan yüksekte iş yapılır.</p>
             </article>
-            <article>
+            <article data-reveal style="--d: 90ms">
               <span class="facts-n" aria-hidden="true">02</span>
               <h3>Saha</h3>
               <p>Kısacası yükseklerdeyiz. Cephe, türbin, sahne, yamaç ve tarihi yapıda aynı yöntemle ineriz.</p>
             </article>
-            <article>
+            <article data-reveal style="--d: 180ms">
               <span class="facts-n" aria-hidden="true">03</span>
               <h3>Standart</h3>
               <p>IRATA ve SPRAT pratiği, CE/EN donanım. Çift hat, keşif ve risk analizi işin önüdür.</p>
@@ -110,7 +113,7 @@
 
       <section class="stats" aria-label="Rakamlar">
         <div class="container stats-grid">
-          <article>
+          <article data-reveal>
             <svg class="stats-ico" viewBox="0 0 64 64" aria-hidden="true">
               <circle cx="32" cy="22" r="10" />
               <path d="M14 52c4-12 10-18 18-18s14 6 18 18" />
@@ -119,7 +122,7 @@
             <p><span data-count="39">0</span>+</p>
             <h3>Kurum referansı</h3>
           </article>
-          <article>
+          <article data-reveal style="--d: 80ms">
             <svg class="stats-ico" viewBox="0 0 64 64" aria-hidden="true">
               <rect x="16" y="12" width="28" height="36" />
               <path class="fine" d="M22 22h16M22 30h16M22 38h12" />
@@ -130,7 +133,7 @@
             <p><span data-count="50">0</span>+</p>
             <h3>Biten proje</h3>
           </article>
-          <article>
+          <article data-reveal style="--d: 160ms">
             <svg class="stats-ico" viewBox="0 0 64 64" aria-hidden="true">
               <path d="M32 10l22 8v16c0 14-10 24-22 28C20 58 10 48 10 34V18z" />
               <path class="accent" d="M22 34l8 8 14-16" />
@@ -138,7 +141,7 @@
             <p><span data-count="99">0</span>%</p>
             <h3>İş güvenliği</h3>
           </article>
-          <article>
+          <article data-reveal style="--d: 240ms">
             <svg class="stats-ico" viewBox="0 0 64 64" aria-hidden="true">
               <circle cx="32" cy="18" r="8" />
               <path d="M20 56V36c0-6 5-10 12-10s12 4 12 10v20" />
@@ -153,11 +156,11 @@
 
       <section class="section refs" id="referanslar">
         <div class="container refs-head">
-          <div>
+          <div data-reveal>
             <p class="section-tag">Referanslar</p>
             <h2>Hizmet verdiğimiz kurum ve kuruluşlar</h2>
           </div>
-          <p class="refs-lead">
+          <p class="refs-lead" data-reveal style="--d: 120ms">
             Katalogdaki kurum ve kuruluşlar bu bölümde. Logoları sonra ekleyeceğiz; şimdilik
             unvanlar duruyor.
           </p>
@@ -172,7 +175,7 @@
 
       <section class="section services" id="hizmetler">
         <div class="container">
-          <div class="services-intro">
+          <div class="services-intro" data-reveal>
             <p class="section-tag">Hizmetler</p>
             <h2>Uzmanlık<br />alanları</h2>
           </div>
@@ -182,27 +185,27 @@
 
       <section class="section process" id="surec">
         <div class="container">
-          <div class="split-intro">
+          <div class="split-intro" data-reveal>
             <p class="section-tag">Süreç</p>
             <h2>Keşif.<br />Plan.<br />Saha.</h2>
           </div>
           <ol class="steps">
-            <li>
+            <li data-reveal>
               <span class="steps-n">01</span>
               <h3>Keşif</h3>
               <p>Yükseklik, ankraj, düşüş hattı, hava ve çevre. Fotoğraf ve not; sahaya girmeden yöntem seçilir.</p>
             </li>
-            <li>
+            <li data-reveal style="--d: 90ms">
               <span class="steps-n">02</span>
               <h3>Plan</h3>
               <p>Risk analizi, ekip, malzeme, süre. Çift bağımsız hat ve yedek indirme yolu yazılı hale gelir.</p>
             </li>
-            <li>
+            <li data-reveal style="--d: 180ms">
               <span class="steps-n">03</span>
               <h3>Saha</h3>
               <p>İskele kurulmaz. İş, planlanan pencerede yapılır; bina girişi ve trafik mümkün olduğunca açık kalır.</p>
             </li>
-            <li>
+            <li data-reveal style="--d: 270ms">
               <span class="steps-n">04</span>
               <h3>Teslim</h3>
               <p>Kontrol, saha temizliği, kısa rapor. Kalıcı hat veya tekrar iş varsa tarih netleşir.</p>
@@ -213,14 +216,14 @@
 
       <section class="section works" id="isler">
         <div class="container">
-          <div class="split-intro">
+          <div class="split-intro" data-reveal>
             <p class="section-tag">İşler</p>
             <h2>Sahadan<br />örnekler</h2>
           </div>
-          <p class="works-note">
+          <p class="works-note" data-reveal>
             Katalogdaki iş kollarından sahadan örnekler. Proje adı ve tarih keşif dosyasına göre eklenir.
           </p>
-          <div class="works-list">
+          <div class="works-list" data-reveal>
             <a class="work-row" href="hizmet.html#temizlik">
               <span>01</span>
               <strong>Dış ve iç cephe temizliği</strong>
@@ -267,11 +270,11 @@
 
       <section class="section about-section" id="hakkimizda">
         <div class="container">
-          <div class="split-intro">
+          <div class="split-intro" data-reveal>
             <p class="section-tag">Hakkımızda</p>
             <h2>Magnum<br />Works</h2>
           </div>
-          <div class="about">
+          <div class="about" data-reveal>
             <div class="about-copy">
               <h3>Kısacası yükseklerdeyiz.</h3>
               <p>
@@ -300,37 +303,37 @@
 
       <section class="section certs" id="sertifikalar">
         <div class="container">
-          <div class="split-intro">
+          <div class="split-intro" data-reveal>
             <p class="section-tag">Hakkımızda</p>
             <h2>Sertifika<br />ve marka</h2>
           </div>
-          <p class="works-note">
+          <p class="works-note" data-reveal>
             Katalog kapağındaki standartlar: IRATA, SPRAT, CE ve EN. Donanımda Petzl ve Edelrid.
           </p>
           <div class="cert-grid">
-            <article>
+            <article data-reveal>
               <span>01</span>
               <h3>IRATA</h3>
               <p>İple erişim teknisyenleri uluslararası IRATA seviyelerine göre çalışır.</p>
             </article>
-            <article>
+            <article data-reveal style="--d: 80ms">
               <span>02</span>
               <h3>SPRAT</h3>
               <p>Society of Professional Rope Access Technicians pratiği sahada uygulanır.</p>
             </article>
-            <article>
+            <article data-reveal style="--d: 160ms">
               <span>03</span>
               <h3>CE / EN</h3>
               <p>Kullanılan kişisel koruyucu donanım Avrupa uygunluk ve norm çerçevesindedir.</p>
             </article>
-            <article>
+            <article data-reveal style="--d: 240ms">
               <span>04</span>
               <h3>Risk analizi</h3>
               <p>Her iş öncesi saha keşfi, ankraj kontrolü ve yazılı yöntem.</p>
             </article>
           </div>
-          <h3 class="brands-title">Standartlar ve kullanılan markalar</h3>
-          <figure class="brands-strip">
+          <h3 class="brands-title" data-reveal>Standartlar ve kullanılan markalar</h3>
+          <figure class="brands-strip" data-reveal style="--d: 100ms">
             <img
               src="assets/standartlar.png"
               alt="CE, EN, SPRAT, IRATA International, Petzl ve Edelrid"
@@ -343,12 +346,12 @@
 
       <section class="section team" id="ekip">
         <div class="container">
-          <div class="split-intro">
+          <div class="split-intro" data-reveal>
             <p class="section-tag">Hakkımızda</p>
             <h2>Ekibimiz</h2>
           </div>
-          <p class="works-note">Katalogdaki irtibat: IRATA iple erişim uzmanı.</p>
-          <div class="works-list team-list">
+          <p class="works-note" data-reveal>Katalogdaki irtibat: IRATA iple erişim uzmanı.</p>
+          <div class="works-list team-list" data-reveal>
             <div class="work-row">
               <span>01</span>
               <strong>Egemen C. Kılıçoğlu</strong>
@@ -365,45 +368,65 @@
 
       <section class="section faq" id="sss">
         <div class="container">
-          <div class="split-intro">
+          <div class="split-intro" data-reveal>
             <p class="section-tag">SSS</p>
             <h2>Sık<br />sorulanlar</h2>
           </div>
-          <div class="faq-list">
+          <div class="faq-list" data-reveal>
             <details>
               <summary>İskele yerine neden ip?</summary>
-              <p>
-                İskele ve vinç kurmak yavaş, pahalı ve bazen imkânsızdır. İple erişim ankrajdan inerek
-                aynı noktaya daha kısa sürede ulaşır; giriş ve trafik kapanmaz.
-              </p>
+              <div class="faq-a">
+                <div class="faq-a-in">
+                  <p>
+                    İskele ve vinç kurmak yavaş, pahalı ve bazen imkânsızdır. İple erişim ankrajdan inerek
+                    aynı noktaya daha kısa sürede ulaşır; giriş ve trafik kapanmaz.
+                  </p>
+                </div>
+              </div>
             </details>
             <details>
               <summary>Güvenlik nasıl sağlanır?</summary>
-              <p>
-                Çalışma çift bağımsız hatladır: biri iş, biri emniyet. Öncesinde keşif ve risk analizi
-                yapılır. Ekip iple erişim eğitimlidir; IRATA pratiklerine uygun çalışılır.
-              </p>
+              <div class="faq-a">
+                <div class="faq-a-in">
+                  <p>
+                    Çalışma çift bağımsız hatladır: biri iş, biri emniyet. Öncesinde keşif ve risk analizi
+                    yapılır. Ekip iple erişim eğitimlidir; IRATA pratiklerine uygun çalışılır.
+                  </p>
+                </div>
+              </div>
             </details>
             <details>
               <summary>Süre neye bağlı?</summary>
-              <p>
-                Yükseklik, hava, ankraj kalitesi ve işin türü. Küçük cephe işi saatler; türbin veya
-                viyadük günlere yayılır. Keşif sonrası net tarih verilir.
-              </p>
+              <div class="faq-a">
+                <div class="faq-a-in">
+                  <p>
+                    Yükseklik, hava, ankraj kalitesi ve işin türü. Küçük cephe işi saatler; türbin veya
+                    viyadük günlere yayılır. Keşif sonrası net tarih verilir.
+                  </p>
+                </div>
+              </div>
             </details>
             <details>
               <summary>Fiyat nasıl çıkar?</summary>
-              <p>
-                Metraj + erişim zorluğu + ekip + süre. Keşif olmadan sabit paket yok. Formdaki konum
-                ve yükseklik ilk aralığı konuşmak için yeter.
-              </p>
+              <div class="faq-a">
+                <div class="faq-a-in">
+                  <p>
+                    Metraj + erişim zorluğu + ekip + süre. Keşif olmadan sabit paket yok. Formdaki konum
+                    ve yükseklik ilk aralığı konuşmak için yeter.
+                  </p>
+                </div>
+              </div>
             </details>
             <details>
               <summary>Hangi yapılarda çalışırsınız?</summary>
-              <p>
-                Plaza, köprü, türbin, sahne, yamaç, ağaç, silo, minare. Vinç veya iskele uymuyorsa
-                keşif isteriz; ip uygunsa işimizdir.
-              </p>
+              <div class="faq-a">
+                <div class="faq-a-in">
+                  <p>
+                    Plaza, köprü, türbin, sahne, yamaç, ağaç, silo, minare. Vinç veya iskele uymuyorsa
+                    keşif isteriz; ip uygunsa işimizdir.
+                  </p>
+                </div>
+              </div>
             </details>
           </div>
         </div>
@@ -411,7 +434,7 @@
 
       <section class="section contact" id="iletisim">
         <div class="container contact-grid">
-          <div class="contact-copy">
+          <div class="contact-copy" data-reveal>
             <p class="section-tag">İletişim</p>
             <h2>Keşif</h2>
             <p class="contact-sub">ve teklif. İşin türü, konum ve tahmini yükseklik yeterli.</p>
@@ -434,7 +457,7 @@
               </div>
             </dl>
           </div>
-          <form class="form" action="mailto:magnum.egemen@gmail.com" method="post" enctype="text/plain">
+          <form class="form" action="mailto:magnum.egemen@gmail.com" method="post" enctype="text/plain" data-reveal style="--d: 140ms">
             <label>
               Ad soyad
               <input type="text" name="name" required autocomplete="name" />
