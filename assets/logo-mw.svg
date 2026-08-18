@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="MagnumWorks">
+  <defs>
+    <clipPath id="mw-disk">
+      <circle cx="128" cy="128" r="124"/>
+    </clipPath>
+    <clipPath id="mw-left">
+      <polygon points="0,0 120,0 148,256 0,256"/>
+    </clipPath>
+    <clipPath id="mw-right">
+      <polygon points="120,0 256,0 256,256 148,256"/>
+    </clipPath>
+  </defs>
+  <circle cx="128" cy="128" r="124" fill="#e07812"/>
+  <circle cx="128" cy="128" r="122.5" fill="none" stroke="#f4efe6" stroke-width="2.5"/>
+  <g clip-path="url(#mw-disk)" transform="translate(128 128) skewX(-13) translate(-128 -128)">
+    <g clip-path="url(#mw-left)">
+      <path fill="#111111" d="M54 190 L64 70 H86 L104 150 L118 70 V10 H140 V70 L154 150 L172 70 H194 L184 190 H164 L152 118 L142 190 V246 H116 V190 H106 L94 118 L76 190 Z"/>
+    </g>
+    <g clip-path="url(#mw-right)">
+      <path fill="#ffffff" d="M54 190 L64 70 H86 L104 150 L118 70 V10 H140 V70 L154 150 L172 70 H194 L184 190 H164 L152 118 L142 190 V246 H116 V190 H106 L94 118 L76 190 Z"/>
+    </g>
+  </g>
+</svg>

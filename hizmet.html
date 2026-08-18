@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hizmet | MagnumWorks</title>
+    <meta name="description" content="MagnumWorks iple erişim hizmeti." />
+    <meta name="theme-color" content="#0f1113" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <script>
+      try {
+        if (localStorage.getItem("magnum-theme") === "night") {
+          document.documentElement.dataset.theme = "night";
+        }
+      } catch (err) {}
+    </script>
+  </head>
+  <body class="page-inner">
+    <a class="skip-link" href="#icerik">İçeriğe geç</a>
+    <div class="scroll-progress" aria-hidden="true"></div>
+
+    <header class="site-header is-stuck">
+      <div class="header-top">
+        <div class="container header-top-inner">
+          <p class="header-meta">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m5 7 7 6 7-6" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+            E-mail: <a href="mailto:magnum.egemen@gmail.com">magnum.egemen@gmail.com</a>
+          </p>
+          <p class="header-meta">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 4.5h3l1.5 4-2 1.2a12 12 0 0 0 5.3 5.3l1.2-2 4 1.5v3A15 15 0 0 1 6.5 4.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            GSM: <a href="tel:+905343252151">0534 325 21 51</a>
+          </p>
+          <button class="theme-toggle" type="button" aria-pressed="false" aria-label="Saha gece modu">
+            Gece görünümü
+          </button>
+        </div>
+      </div>
+      <div class="header-bar">
+        <a class="logo-slab" href="index.html" aria-label="MagnumWorks anasayfa">
+          <img class="logo-mark" src="assets/logo-mw.svg" width="56" height="56" alt="MagnumWorks" />
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menü">
+          <span></span><span></span><span></span>
+        </button>
+        <nav class="nav" id="site-nav">
+          <a class="nav-link" href="index.html">Ana sayfa</a>
+          <a class="nav-link" href="index.html#referanslar">Referanslar</a>
+          <a class="nav-link is-active" href="index.html#hizmetler">Hizmetler</a>
+          <a class="nav-link" href="index.html#surec">Süreç</a>
+          <a class="nav-link" href="index.html#isler">İşler</a>
+          <a class="nav-link" href="index.html#sss">SSS</a>
+          <div class="nav-drop">
+            <button class="nav-link nav-drop-btn" type="button" aria-expanded="false" aria-controls="hakkinda-menu">
+              Hakkımızda
+            </button>
+            <div class="nav-drop-menu" id="hakkinda-menu">
+              <a href="index.html#hakkimizda">Magnum Works</a>
+              <a href="index.html#sertifikalar">Sertifikalar ve kullanılan markalar</a>
+              <a href="index.html#ekip">Ekibimiz</a>
+            </div>
+          </div>
+          <a class="nav-link" href="index.html#iletisim">İletişim</a>
+          <a class="btn btn-primary btn-nav" href="index.html#iletisim">Teklif al</a>
+        </nav>
+        <a class="quote-slab" href="index.html#iletisim">Teklif al</a>
+      </div>
+    </header>
+
+    <main id="icerik" class="service-page">
+      <section class="section service-hero">
+        <div class="container">
+          <a class="back-link" href="index.html#hizmetler">Tüm hizmetler</a>
+          <p class="kicker" data-n></p>
+          <h1 data-title></h1>
+          <p class="dek" data-dek></p>
+        </div>
+      </section>
+
+      <section class="section service-body">
+        <div class="container service-body-grid">
+          <article data-body></article>
+          <aside>
+            <ul data-items></ul>
+            <a class="btn btn-primary" href="index.html#iletisim">Teklif al</a>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section gallery" id="galeri" hidden>
+        <div class="container">
+          <div class="split-intro">
+            <p class="section-tag">Galeri</p>
+            <h2>Sahadan</h2>
+          </div>
+          <div class="gallery-grid" data-gallery></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <span>MagnumWorks</span>
+        <span>Endüstriyel dağcılık · İple erişim</span>
+        <a href="https://www.magnumworks.net" rel="noopener">www.magnumworks.net</a>
+        <span>© 2026</span>
+      </div>
+    </footer>
+
+    <button class="to-top" type="button" aria-label="Başa dön">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+        <path d="M12 19V5M5 12l7-7 7 7" />
+      </svg>
+    </button>
+    <script src="js/services.js"></script>
+    <script src="js/hizmet.js"></script>
+    <script src="js/rope.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MagnumWorks | Endüstriyel Dağcılık ve İple Erişim</title>
+    <meta
+      name="description"
+      content="MagnumWorks — endüstriyel dağcılık ve iple erişim. Montaj, cephe temizliği, rüzgar enerjisi, kurtarma ve yaşam hatları."
+    />
+    <meta name="theme-color" content="#0f1113" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <script>
+      try {
+        if (localStorage.getItem("magnum-theme") === "night") {
+          document.documentElement.dataset.theme = "night";
+        }
+      } catch (err) {}
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#hizmetler">İçeriğe geç</a>
+    <div class="scroll-progress" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <div class="header-top">
+        <div class="container header-top-inner">
+          <p class="header-meta">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m5 7 7 6 7-6" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+            E-mail: <a href="mailto:magnum.egemen@gmail.com">magnum.egemen@gmail.com</a>
+          </p>
+          <p class="header-meta">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 4.5h3l1.5 4-2 1.2a12 12 0 0 0 5.3 5.3l1.2-2 4 1.5v3A15 15 0 0 1 6.5 4.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            GSM: <a href="tel:+905343252151">0534 325 21 51</a>
+          </p>
+          <button class="theme-toggle" type="button" aria-pressed="false" aria-label="Saha gece modu">
+            Gece görünümü
+          </button>
+        </div>
+      </div>
+      <div class="header-bar">
+        <a class="logo-slab" href="#ust" aria-label="MagnumWorks anasayfa">
+          <img class="logo-mark" src="assets/logo-mw.svg" width="56" height="56" alt="MagnumWorks" />
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menü">
+          <span></span><span></span><span></span>
+        </button>
+        <nav class="nav" id="site-nav">
+          <a class="nav-link is-active" href="#ust">Ana sayfa</a>
+          <a class="nav-link" href="#referanslar">Referanslar</a>
+          <a class="nav-link" href="#hizmetler">Hizmetler</a>
+          <a class="nav-link" href="#surec">Süreç</a>
+          <a class="nav-link" href="#isler">İşler</a>
+          <a class="nav-link" href="#sss">SSS</a>
+          <div class="nav-drop">
+            <button class="nav-link nav-drop-btn" type="button" aria-expanded="false" aria-controls="hakkinda-menu">
+              Hakkımızda
+            </button>
+            <div class="nav-drop-menu" id="hakkinda-menu">
+              <a href="#hakkimizda">Magnum Works</a>
+              <a href="#sertifikalar">Sertifikalar ve kullanılan markalar</a>
+              <a href="#ekip">Ekibimiz</a>
+            </div>
+          </div>
+          <a class="nav-link" href="#iletisim">İletişim</a>
+          <a class="btn btn-primary btn-nav" href="#iletisim">Teklif al</a>
+        </nav>
+        <a class="quote-slab" href="#iletisim">Teklif al</a>
+      </div>
+    </header>
+
+    <main id="ust">
+      <section class="hero" aria-labelledby="hero-title">
+        <img class="hero-photo" src="assets/hero.jpg" alt="MagnumWorks ekibi çatıda, iple erişim donanımıyla" />
+        <div class="hero-veil" aria-hidden="true"></div>
+        <div class="hero-center">
+          <h1 id="hero-title">Endüstriyel dağcılık.<br />İple erişim hizmetleri.</h1>
+          <a class="btn btn-hero" href="#hizmetler">Tüm hizmetler</a>
+        </div>
+      </section>
+
+      <section class="facts" aria-label="Çalışma ilkeleri">
+        <div class="container facts-layout">
+          <h2 class="facts-lead">Nedir?</h2>
+          <div class="facts-list">
+            <article>
+              <span class="facts-n" aria-hidden="true">01</span>
+              <h3>Yöntem</h3>
+              <p>Endüstriyel dağcılık, iple erişimdir. İskele veya vinç kurulmadan yüksekte iş yapılır.</p>
+            </article>
+            <article>
+              <span class="facts-n" aria-hidden="true">02</span>
+              <h3>Saha</h3>
+              <p>Kısacası yükseklerdeyiz. Cephe, türbin, sahne, yamaç ve tarihi yapıda aynı yöntemle ineriz.</p>
+            </article>
+            <article>
+              <span class="facts-n" aria-hidden="true">03</span>
+              <h3>Standart</h3>
+              <p>IRATA ve SPRAT pratiği, CE/EN donanım. Çift hat, keşif ve risk analizi işin önüdür.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="stats" aria-label="Rakamlar">
+        <div class="container stats-grid">
+          <article>
+            <svg class="stats-ico" viewBox="0 0 64 64" aria-hidden="true">
+              <circle cx="32" cy="22" r="10" />
+              <path d="M14 52c4-12 10-18 18-18s14 6 18 18" />
+              <path class="accent" d="M22 56h6M29 56h6M36 56h6" />
+            </svg>
+            <p><span data-count="39">0</span>+</p>
+            <h3>Kurum referansı</h3>
+          </article>
+          <article>
+            <svg class="stats-ico" viewBox="0 0 64 64" aria-hidden="true">
+              <rect x="16" y="12" width="28" height="36" />
+              <path class="fine" d="M22 22h16M22 30h16M22 38h12" />
+              <path d="M24 18l20 8v32H24z" />
+              <circle class="accent" cx="44" cy="46" r="8" />
+              <path class="accent" d="M41 46l2.5 2.5 5-5" />
+            </svg>
+            <p><span data-count="50">0</span>+</p>
+            <h3>Biten proje</h3>
+          </article>
+          <article>
+            <svg class="stats-ico" viewBox="0 0 64 64" aria-hidden="true">
+              <path d="M32 10l22 8v16c0 14-10 24-22 28C20 58 10 48 10 34V18z" />
+              <path class="accent" d="M22 34l8 8 14-16" />
+            </svg>
+            <p><span data-count="99">0</span>%</p>
+            <h3>İş güvenliği</h3>
+          </article>
+          <article>
+            <svg class="stats-ico" viewBox="0 0 64 64" aria-hidden="true">
+              <circle cx="32" cy="18" r="8" />
+              <path d="M20 56V36c0-6 5-10 12-10s12 4 12 10v20" />
+              <path class="accent" d="M32 26v30" />
+              <circle cx="32" cy="14" r="3" />
+            </svg>
+            <p><span data-count="30">0</span>+</p>
+            <h3>Uzman dağcı</h3>
+          </article>
+        </div>
+      </section>
+
+      <section class="section refs" id="referanslar">
+        <div class="container refs-head">
+          <div>
+            <p class="section-tag">Referanslar</p>
+            <h2>Hizmet verdiğimiz kurum ve kuruluşlar</h2>
+          </div>
+          <p class="refs-lead">
+            Katalogdaki kurum ve kuruluşlar bu bölümde. Logoları sonra ekleyeceğiz; şimdilik
+            unvanlar duruyor.
+          </p>
+        </div>
+        <div class="refs-marquee">
+          <ul class="refs-track" data-refs-track></ul>
+        </div>
+        <div class="container">
+          <ul class="refs-names" data-refs-list></ul>
+        </div>
+      </section>
+
+      <section class="section services" id="hizmetler">
+        <div class="container">
+          <div class="services-intro">
+            <p class="section-tag">Hizmetler</p>
+            <h2>Uzmanlık<br />alanları</h2>
+          </div>
+          <div class="service-list" data-service-list></div>
+        </div>
+      </section>
+
+      <section class="section process" id="surec">
+        <div class="container">
+          <div class="split-intro">
+            <p class="section-tag">Süreç</p>
+            <h2>Keşif.<br />Plan.<br />Saha.</h2>
+          </div>
+          <ol class="steps">
+            <li>
+              <span class="steps-n">01</span>
+              <h3>Keşif</h3>
+              <p>Yükseklik, ankraj, düşüş hattı, hava ve çevre. Fotoğraf ve not; sahaya girmeden yöntem seçilir.</p>
+            </li>
+            <li>
+              <span class="steps-n">02</span>
+              <h3>Plan</h3>
+              <p>Risk analizi, ekip, malzeme, süre. Çift bağımsız hat ve yedek indirme yolu yazılı hale gelir.</p>
+            </li>
+            <li>
+              <span class="steps-n">03</span>
+              <h3>Saha</h3>
+              <p>İskele kurulmaz. İş, planlanan pencerede yapılır; bina girişi ve trafik mümkün olduğunca açık kalır.</p>
+            </li>
+            <li>
+              <span class="steps-n">04</span>
+              <h3>Teslim</h3>
+              <p>Kontrol, saha temizliği, kısa rapor. Kalıcı hat veya tekrar iş varsa tarih netleşir.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="section works" id="isler">
+        <div class="container">
+          <div class="split-intro">
+            <p class="section-tag">İşler</p>
+            <h2>Sahadan<br />örnekler</h2>
+          </div>
+          <p class="works-note">
+            Katalogdaki iş kollarından sahadan örnekler. Proje adı ve tarih keşif dosyasına göre eklenir.
+          </p>
+          <div class="works-list">
+            <a class="work-row" href="hizmet.html#temizlik">
+              <span>01</span>
+              <strong>Dış ve iç cephe temizliği</strong>
+              <em>Cam · plaza</em>
+            </a>
+            <a class="work-row" href="hizmet.html#enerji">
+              <span>02</span>
+              <strong>Enerji santrali bakımı</strong>
+              <em>Türbin · kule</em>
+            </a>
+            <a class="work-row" href="hizmet.html#yamac">
+              <span>03</span>
+              <strong>Yamaç ve kaya bariyeri</strong>
+              <em>Şev · yol</em>
+            </a>
+            <a class="work-row" href="hizmet.html#yasam-hatlari">
+              <span>04</span>
+              <strong>Yaşam hattı montajı</strong>
+              <em>Dikey · yatay</em>
+            </a>
+            <a class="work-row" href="hizmet.html#sahne">
+              <span>05</span>
+              <strong>Sahne ve show kurulumu</strong>
+              <em>Rigging · efekt</em>
+            </a>
+            <a class="work-row" href="hizmet.html#montaj">
+              <span>06</span>
+              <strong>Montaj ve demontaj</strong>
+              <em>Cephe · çatı</em>
+            </a>
+            <a class="work-row" href="hizmet.html#kurtarma">
+              <span>07</span>
+              <strong>Arama ve kurtarma</strong>
+              <em>Destek ekip</em>
+            </a>
+            <a class="work-row" href="hizmet.html#restorasyon">
+              <span>08</span>
+              <strong>Tarihi alan keşfi</strong>
+              <em>Restorasyon</em>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section about-section" id="hakkimizda">
+        <div class="container">
+          <div class="split-intro">
+            <p class="section-tag">Hakkımızda</p>
+            <h2>Magnum<br />Works</h2>
+          </div>
+          <div class="about">
+            <div class="about-copy">
+              <h3>Kısacası yükseklerdeyiz.</h3>
+              <p>
+                MagnumWorks, endüstriyel dağcılık ve iple erişim hizmetleri verir. İskele veya
+                vinçin yetersiz kaldığı cephe, enerji, sahne, yamaç ve tarihi yapı işlerinde sahaya ineriz.
+              </p>
+              <p>
+                Çalışma IRATA ve SPRAT pratiğine, CE/EN donanıma göre yürür. Her iş öncesi keşif ve
+                risk analizi yapılır; kapsam keşif sonrası netleşir.
+              </p>
+            </div>
+            <aside class="about-aside">
+              <p><span>Yöntem</span> İple erişim / endüstriyel dağcılık</p>
+              <p><span>Emniyet</span> Çift bağımsız hat</p>
+              <p><span>Standart</span> IRATA uyumlu saha pratiği</p>
+              <p><span>Kapsam</span> 6 uzmanlık alanı</p>
+              <nav class="about-index" aria-label="Hakkımızda">
+                <a href="#hakkimizda" aria-current="page">Magnum Works</a>
+                <a href="#sertifikalar">Sertifikalar ve kullanılan markalar</a>
+                <a href="#ekip">Ekibimiz</a>
+              </nav>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="section certs" id="sertifikalar">
+        <div class="container">
+          <div class="split-intro">
+            <p class="section-tag">Hakkımızda</p>
+            <h2>Sertifika<br />ve marka</h2>
+          </div>
+          <p class="works-note">
+            Katalog kapağındaki standartlar: IRATA, SPRAT, CE ve EN. Donanımda Petzl ve Edelrid.
+          </p>
+          <div class="cert-grid">
+            <article>
+              <span>01</span>
+              <h3>IRATA</h3>
+              <p>İple erişim teknisyenleri uluslararası IRATA seviyelerine göre çalışır.</p>
+            </article>
+            <article>
+              <span>02</span>
+              <h3>SPRAT</h3>
+              <p>Society of Professional Rope Access Technicians pratiği sahada uygulanır.</p>
+            </article>
+            <article>
+              <span>03</span>
+              <h3>CE / EN</h3>
+              <p>Kullanılan kişisel koruyucu donanım Avrupa uygunluk ve norm çerçevesindedir.</p>
+            </article>
+            <article>
+              <span>04</span>
+              <h3>Risk analizi</h3>
+              <p>Her iş öncesi saha keşfi, ankraj kontrolü ve yazılı yöntem.</p>
+            </article>
+          </div>
+          <h3 class="brands-title">Standartlar ve kullanılan markalar</h3>
+          <figure class="brands-strip">
+            <img
+              src="assets/standartlar.png"
+              alt="CE, EN, SPRAT, IRATA International, Petzl ve Edelrid"
+              width="1200"
+              height="200"
+            />
+          </figure>
+        </div>
+      </section>
+
+      <section class="section team" id="ekip">
+        <div class="container">
+          <div class="split-intro">
+            <p class="section-tag">Hakkımızda</p>
+            <h2>Ekibimiz</h2>
+          </div>
+          <p class="works-note">Katalogdaki irtibat: IRATA iple erişim uzmanı.</p>
+          <div class="works-list team-list">
+            <div class="work-row">
+              <span>01</span>
+              <strong>Egemen C. Kılıçoğlu</strong>
+              <em>IRATA iple erişim uzmanı</em>
+            </div>
+            <div class="work-row">
+              <span>02</span>
+              <strong>Saha ekibi</strong>
+              <em>İple erişim teknisyenleri</em>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section faq" id="sss">
+        <div class="container">
+          <div class="split-intro">
+            <p class="section-tag">SSS</p>
+            <h2>Sık<br />sorulanlar</h2>
+          </div>
+          <div class="faq-list">
+            <details>
+              <summary>İskele yerine neden ip?</summary>
+              <p>
+                İskele ve vinç kurmak yavaş, pahalı ve bazen imkânsızdır. İple erişim ankrajdan inerek
+                aynı noktaya daha kısa sürede ulaşır; giriş ve trafik kapanmaz.
+              </p>
+            </details>
+            <details>
+              <summary>Güvenlik nasıl sağlanır?</summary>
+              <p>
+                Çalışma çift bağımsız hatladır: biri iş, biri emniyet. Öncesinde keşif ve risk analizi
+                yapılır. Ekip iple erişim eğitimlidir; IRATA pratiklerine uygun çalışılır.
+              </p>
+            </details>
+            <details>
+              <summary>Süre neye bağlı?</summary>
+              <p>
+                Yükseklik, hava, ankraj kalitesi ve işin türü. Küçük cephe işi saatler; türbin veya
+                viyadük günlere yayılır. Keşif sonrası net tarih verilir.
+              </p>
+            </details>
+            <details>
+              <summary>Fiyat nasıl çıkar?</summary>
+              <p>
+                Metraj + erişim zorluğu + ekip + süre. Keşif olmadan sabit paket yok. Formdaki konum
+                ve yükseklik ilk aralığı konuşmak için yeter.
+              </p>
+            </details>
+            <details>
+              <summary>Hangi yapılarda çalışırsınız?</summary>
+              <p>
+                Plaza, köprü, türbin, sahne, yamaç, ağaç, silo, minare. Vinç veya iskele uymuyorsa
+                keşif isteriz; ip uygunsa işimizdir.
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <section class="section contact" id="iletisim">
+        <div class="container contact-grid">
+          <div class="contact-copy">
+            <p class="section-tag">İletişim</p>
+            <h2>Keşif</h2>
+            <p class="contact-sub">ve teklif. İşin türü, konum ve tahmini yükseklik yeterli.</p>
+            <dl class="meta">
+              <div>
+                <dt>İrtibat</dt>
+                <dd>Egemen C. Kılıçoğlu<br />IRATA iple erişim uzmanı</dd>
+              </div>
+              <div>
+                <dt>GSM</dt>
+                <dd><a href="tel:+905343252151">0534 325 21 51</a></dd>
+              </div>
+              <div>
+                <dt>E-posta</dt>
+                <dd><a href="mailto:magnum.egemen@gmail.com">magnum.egemen@gmail.com</a></dd>
+              </div>
+              <div>
+                <dt>Web</dt>
+                <dd><a href="https://www.magnumworks.net" rel="noopener">www.magnumworks.net</a></dd>
+              </div>
+            </dl>
+          </div>
+          <form class="form" action="mailto:magnum.egemen@gmail.com" method="post" enctype="text/plain">
+            <label>
+              Ad soyad
+              <input type="text" name="name" required autocomplete="name" />
+            </label>
+            <label>
+              Telefon
+              <input type="tel" name="phone" required autocomplete="tel" />
+            </label>
+            <label>
+              Mesaj
+              <textarea name="message" required placeholder="İşin türü, konum, yükseklik"></textarea>
+            </label>
+            <button class="btn btn-primary" type="submit">Gönder</button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <span>MagnumWorks</span>
+        <span>Endüstriyel dağcılık · İple erişim</span>
+        <a href="https://www.magnumworks.net" rel="noopener">www.magnumworks.net</a>
+        <span>© 2026</span>
+      </div>
+    </footer>
+
+    <button class="to-top" type="button" aria-label="Başa dön">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+        <path d="M12 19V5M5 12l7-7 7 7" />
+      </svg>
+    </button>
+    <script src="js/services.js"></script>
+    <script src="js/refs.js?v=2"></script>
+    <script src="js/rope.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
