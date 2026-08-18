@@ -33,8 +33,7 @@
   --display: "Archivo", "Inter", sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
 
-  --fs-xl: clamp(3rem, 11.5vw, 10.5rem);
-  --fs-l: clamp(2.4rem, 6.6vw, 5.6rem);
+  --fs-l: clamp(2rem, 5vw, 3.9rem);
   --fs-m: clamp(1.75rem, 3.4vw, 2.9rem);
   --fs-s: clamp(1.15rem, 1.9vw, 1.5rem);
 
@@ -634,21 +633,27 @@ button {
   height: 100%;
   object-fit: cover;
   object-position: center 38%;
-  filter: grayscale(1) contrast(1.12) brightness(0.62);
+  filter: contrast(1.04) saturate(1.06) brightness(0.88);
   transform: scale(1.08);
   will-change: transform;
 }
 
 html[data-theme="day"] .hero-media img {
-  filter: grayscale(1) contrast(1.05) brightness(0.95);
+  filter: contrast(1.02) saturate(1.04);
 }
 
+/* Yalnızca yazının okunduğu yerde koyulaşan perde; fotoğrafın rengi kalır. */
 .hero-media::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(8, 9, 10, 0.72) 0%, rgba(8, 9, 10, 0.34) 38%, var(--void) 96%),
-    radial-gradient(120% 80% at 12% 100%, rgba(255, 90, 31, 0.22), transparent 60%);
+  background: linear-gradient(
+    180deg,
+    rgba(8, 9, 10, 0.5) 0%,
+    rgba(8, 9, 10, 0.12) 34%,
+    rgba(8, 9, 10, 0.62) 78%,
+    var(--void) 99%
+  );
 }
 
 .hero-top {
@@ -676,13 +681,14 @@ html[data-theme="day"] .hero-media img {
 .hero-title {
   font-family: var(--display);
   font-weight: 800;
-  font-stretch: 118%;
-  font-size: var(--fs-xl);
-  line-height: 0.85;
-  letter-spacing: -0.045em;
+  font-stretch: 106%;
+  font-size: clamp(1.9rem, 4.4vw, 3.5rem);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
   text-transform: uppercase;
   margin: 0;
-  max-width: 17ch;
+  max-width: 20ch;
+  text-shadow: 0 6px 26px rgba(0, 0, 0, 0.42);
 }
 
 .hero-title .ln {
@@ -1850,10 +1856,10 @@ html[data-theme="day"] .brands img {
 .contact-title {
   font-family: var(--display);
   font-weight: 800;
-  font-stretch: 122%;
-  font-size: clamp(3.6rem, 15vw, 12rem);
-  line-height: 0.8;
-  letter-spacing: -0.055em;
+  font-stretch: 114%;
+  font-size: clamp(2.4rem, 7vw, 5.4rem);
+  line-height: 0.88;
+  letter-spacing: -0.045em;
   text-transform: uppercase;
   margin: 12px 0 0;
 }
@@ -1964,9 +1970,9 @@ html[data-theme="day"] .brands img {
 .ftr-word {
   font-family: var(--display);
   font-weight: 800;
-  font-stretch: 125%;
-  font-size: clamp(2.6rem, 13.5vw, 12rem);
-  line-height: 0.8;
+  font-stretch: 118%;
+  font-size: clamp(2.2rem, 8vw, 6.4rem);
+  line-height: 0.85;
   letter-spacing: -0.05em;
   text-transform: uppercase;
   margin: 0 0 clamp(24px, 4vw, 44px);
@@ -2216,79 +2222,6 @@ html[data-theme="day"] .brands img {
 [data-reveal].is-visible {
   opacity: 1;
   transform: none;
-}
-
-/* ---------- İpte inen dağcı ---------- */
-
-.climber {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 62;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.5s var(--ease);
-  will-change: transform;
-  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.55));
-}
-
-.climber.is-on {
-  opacity: 1;
-}
-
-.climber svg {
-  overflow: visible;
-}
-
-.climber svg path,
-.climber svg rect,
-.climber svg circle {
-  fill: none;
-  stroke: var(--bone);
-  stroke-width: 2.1;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.climber .helmet {
-  fill: var(--accent);
-  stroke: var(--accent);
-}
-
-.climber .visor,
-.climber .boot {
-  stroke: var(--accent);
-  stroke-width: 2.6;
-}
-
-.climber .gear {
-  stroke: var(--accent);
-  stroke-width: 2;
-}
-
-.climber .legs {
-  transform-origin: 22px 36px;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .climber.is-moving .legs {
-    animation: kick 0.62s ease-in-out infinite alternate;
-  }
-}
-
-@keyframes kick {
-  from {
-    transform: rotate(-7deg);
-  }
-  to {
-    transform: rotate(6deg);
-  }
-}
-
-@media (max-width: 760px) {
-  .climber {
-    display: none;
-  }
 }
 
 /* Halat imleç durumları */

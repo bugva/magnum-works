@@ -7,9 +7,7 @@
   const WIND = 0.085;
   const RETURN_K = 0.00075;
   const EDGE_BOUNCE = 0.4;
-  const SLACK_SEG = 10;
-  const TWIST = 21;
-  const TWIST_AMP = 2.4;
+  const SLACK_SEG = 3;
   const KNOT_IDS = ["referanslar", "hizmetler", "surec", "isler", "sss", "hakkimizda", "iletisim"];
 
   const canvas = document.createElement("canvas");
@@ -21,7 +19,6 @@
   const mouse = { x: 0, y: 0, active: false };
   const grab = { x: 0, y: 0, active: false };
   let tug = { y: 0, active: false };
-  let unfurl = true;
   let dpr = 1;
   let lastScroll = window.scrollY;
   let scrollForce = 0;
@@ -41,10 +38,7 @@
     const count = Math.max(24, Math.ceil(height / SEG) + SLACK_SEG);
     const x = anchorX();
     if (!points.length) {
-      // Açılışta ip sarılı başlar; yerçekimi ve zincir kısıtı onu aşağı
-      // salar, böylece sayfa yüklenirken halat iniyor gibi görünür.
-      const coil = reduceMotion ? SEG : SEG * 0.22;
-      for (let i = 0; i < count; i += 1) points.push(makePoint(x, 8 + i * coil));
+      for (let i = 0; i < count; i += 1) points.push(makePoint(x, 8 + i * SEG));
       return;
     }
     while (points.length < count) {
@@ -201,72 +195,23 @@
     ctx.lineTo(points[points.length - 1].x, points[points.length - 1].y);
   };
 
-  // Bükümlü tel: ip boyunca normal eksende sinüs salınımı yaparak
-  // sarmal görünümü verir.
-  const traceStrand = (phase) => {
-    ctx.beginPath();
-    let s = 0;
-    let started = false;
-    const top = window.scrollY - 40;
-    const bottom = window.scrollY + window.innerHeight + 40;
-
-    for (let i = 0; i < points.length; i += 1) {
-      const p = points[i];
-      const prev = points[i > 0 ? i - 1 : 0];
-      const next = points[i < points.length - 1 ? i + 1 : i];
-      if (i > 0) s += Math.hypot(p.x - prev.x, p.y - prev.y);
-
-      if (p.y < top || p.y > bottom) {
-        started = false;
-        continue;
-      }
-
-      const tx = next.x - prev.x;
-      const ty = next.y - prev.y;
-      const len = Math.hypot(tx, ty) || 1;
-      const off = Math.sin((s / TWIST) * Math.PI * 2 + phase) * TWIST_AMP;
-      const x = p.x - (ty / len) * off;
-      const y = p.y + (tx / len) * off;
-
-      if (!started) {
-        ctx.moveTo(x, y);
-        started = true;
-      } else {
-        ctx.lineTo(x, y);
-      }
-    }
-  };
-
+  // Tek parça halat: aynı eğri üzerine koyu kenar, gövde ve orta parlama.
   const drawRope = (day) => {
     if (points.length < 2) return;
 
-    // Gölge / kılıf
     traceCore();
-    ctx.strokeStyle = day ? "rgba(10, 12, 14, 0.16)" : "rgba(0, 0, 0, 0.55)";
-    ctx.lineWidth = 8;
+    ctx.strokeStyle = day ? "rgba(10, 12, 14, 0.2)" : "rgba(0, 0, 0, 0.5)";
+    ctx.lineWidth = 6.4;
     ctx.stroke();
 
-    // Çekirdek
     traceCore();
-    ctx.strokeStyle = day ? "#8a2f0d" : "#5c2410";
-    ctx.lineWidth = 5.4;
+    ctx.strokeStyle = day ? "#c2410c" : "#ff5a1f";
+    ctx.lineWidth = 4;
     ctx.stroke();
 
-    // Büküm telleri
-    traceStrand(0);
-    ctx.strokeStyle = "#ff5a1f";
-    ctx.lineWidth = 2.8;
-    ctx.stroke();
-
-    traceStrand(Math.PI);
-    ctx.strokeStyle = day ? "#c2410c" : "#f59e5b";
-    ctx.lineWidth = 2.4;
-    ctx.stroke();
-
-    // İnce parlama
-    traceStrand(Math.PI * 0.5);
-    ctx.strokeStyle = day ? "rgba(255, 255, 255, 0.5)" : "rgba(255, 226, 190, 0.55)";
-    ctx.lineWidth = 1;
+    traceCore();
+    ctx.strokeStyle = day ? "rgba(255, 255, 255, 0.38)" : "rgba(255, 214, 176, 0.42)";
+    ctx.lineWidth = 1.1;
     ctx.stroke();
   };
 
@@ -297,34 +242,15 @@
 
       const p = pointAtY(y);
       const on = id === activeId;
-      const r = on ? 7 : 5;
+      const r = on ? 6 : 4;
 
-      // Düğüm sargısı
       ctx.beginPath();
-      ctx.ellipse(p.x, p.y, r * 0.78, r, 0, 0, Math.PI * 2);
-      ctx.fillStyle = day ? "#8a2f0d" : "#5c2410";
+      ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+      ctx.fillStyle = day ? "#c2410c" : "#ff5a1f";
+      ctx.strokeStyle = day ? "#8a2f0d" : "rgba(255, 214, 176, 0.7)";
+      ctx.lineWidth = 1.4;
       ctx.fill();
-      ctx.lineWidth = 1.6;
-      ctx.strokeStyle = on ? "#ff5a1f" : day ? "#c2410c" : "#f59e5b";
       ctx.stroke();
-
-      // Sargı çizgileri
-      ctx.beginPath();
-      ctx.moveTo(p.x - r * 0.7, p.y - r * 0.35);
-      ctx.lineTo(p.x + r * 0.7, p.y - r * 0.35);
-      ctx.moveTo(p.x - r * 0.7, p.y + r * 0.35);
-      ctx.lineTo(p.x + r * 0.7, p.y + r * 0.35);
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = on ? "#ffd7c2" : day ? "rgba(255,255,255,0.45)" : "rgba(255, 226, 190, 0.4)";
-      ctx.stroke();
-
-      if (on) {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, r + 5, 0, Math.PI * 2);
-        ctx.lineWidth = 1.2;
-        ctx.strokeStyle = "rgba(255, 90, 31, 0.5)";
-        ctx.stroke();
-      }
     });
   };
 
@@ -344,9 +270,6 @@
 
   const tick = () => {
     updateActive();
-    if (unfurl && (reduceMotion || time > 70 || points[points.length - 1].y > window.innerHeight * 1.4)) {
-      unfurl = false;
-    }
     if (!reduceMotion) step();
     else {
       const x = anchorX();
@@ -443,21 +366,6 @@
       });
     });
   }
-
-  /* ---------- Dağcı figürü için ip erişimi ---------- */
-
-  window.MAGNUM_ROPE = {
-    pointAt: (pageY) => {
-      const p = pointAtY(pageY);
-      return { x: p.x, y: p.y };
-    },
-    angleAt: (pageY) => {
-      const a = pointAtY(pageY - 26);
-      const b = pointAtY(pageY + 26);
-      return (Math.atan2(b.x - a.x, b.y - a.y) * -180) / Math.PI;
-    },
-    isReady: () => points.length > 2 && !unfurl,
-  };
 
   sizeCanvas();
   requestAnimationFrame(tick);

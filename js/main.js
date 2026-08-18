@@ -371,41 +371,6 @@ if (ring && !reduceMotion && finePointer) {
   });
 }
 
-/* ---------- İpte inen dağcı ---------- */
-
-const climber = document.querySelector("[data-climber]");
-
-if (climber) {
-  const anchorRatio = 0.56;
-  let lastY = window.scrollY;
-  let moving = 0;
-
-  const ride = () => {
-    const rope = window.MAGNUM_ROPE;
-
-    if (rope && rope.isReady()) {
-      const viewY = window.innerHeight * anchorRatio;
-      const pageY = window.scrollY + viewY;
-      const point = rope.pointAt(pageY);
-      const angle = reduceMotion ? 0 : Math.max(-24, Math.min(24, rope.angleAt(pageY)));
-
-      climber.style.transform = `translate3d(${(point.x - 7).toFixed(1)}px, ${(viewY - 24).toFixed(
-        1
-      )}px, 0) rotate(${angle.toFixed(1)}deg)`;
-      climber.classList.toggle("is-on", window.scrollY > 60);
-
-      const delta = Math.abs(window.scrollY - lastY);
-      lastY = window.scrollY;
-      moving = delta > 1.5 ? 26 : Math.max(moving - 1, 0);
-      climber.classList.toggle("is-moving", moving > 0);
-    }
-
-    requestAnimationFrame(ride);
-  };
-
-  requestAnimationFrame(ride);
-}
-
 /* ---------- İletişim bölümünde imleç ışıması ---------- */
 
 const contact = document.querySelector(".contact");
