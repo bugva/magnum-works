@@ -111,6 +111,23 @@
       }
     }
     constrain();
+    clampToScreen();
+  };
+
+  // İp hiçbir zaman ekran dışına taşmasın: sol/sağ kenarda yumuşak sınır.
+  const clampToScreen = () => {
+    const minX = 3;
+    const maxX = window.innerWidth - 3;
+    for (let i = 1; i < points.length; i += 1) {
+      const p = points[i];
+      if (p.x < minX) {
+        p.x = minX;
+        if (p.ox < minX) p.ox = minX;
+      } else if (p.x > maxX) {
+        p.x = maxX;
+        if (p.ox > maxX) p.ox = maxX;
+      }
+    }
   };
 
   const pointAtY = (y) => {
