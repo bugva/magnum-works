@@ -19,7 +19,9 @@
   const ctx = canvas.getContext("2d");
 
   const mouse = { x: 0, y: 0, active: false };
+  const grab = { x: 0, y: 0, active: false };
   let tug = { y: 0, active: false };
+  let unfurl = true;
   let dpr = 1;
   let lastScroll = window.scrollY;
   let scrollForce = 0;
@@ -39,7 +41,10 @@
     const count = Math.max(24, Math.ceil(height / SEG) + SLACK_SEG);
     const x = anchorX();
     if (!points.length) {
-      for (let i = 0; i < count; i += 1) points.push(makePoint(x, 8 + i * SEG));
+      // Açılışta ip sarılı başlar; yerçekimi ve zincir kısıtı onu aşağı
+      // salar, böylece sayfa yüklenirken halat iniyor gibi görünür.
+      const coil = reduceMotion ? SEG : SEG * 0.22;
+      for (let i = 0; i < count; i += 1) points.push(makePoint(x, 8 + i * coil));
       return;
     }
     while (points.length < count) {
@@ -113,7 +118,7 @@
         if (near > 0) p.x -= near * 0.35;
       }
 
-      if (mouse.active) {
+      if (mouse.active && !grab.active) {
         const dx = p.x - mouse.x;
         const dy = p.y - mouse.y;
         const d2 = dx * dx + dy * dy;
@@ -121,6 +126,15 @@
           const f = (1 - d2 / 16000) * 0.08;
           p.x += dx * f;
           p.y += dy * f;
+        }
+      }
+
+      // Tutulan bölge imleci takip eder; bırakınca ip kendi hızıyla savrulur.
+      if (grab.active) {
+        const near = 1 - Math.min(Math.abs(p.y - grab.y) / 150, 1);
+        if (near > 0) {
+          p.x += (grab.x - p.x) * near * 0.34;
+          p.y += (grab.y - p.y) * near * 0.1;
         }
       }
     }
@@ -330,6 +344,9 @@
 
   const tick = () => {
     updateActive();
+    if (unfurl && (reduceMotion || time > 70 || points[points.length - 1].y > window.innerHeight * 1.4)) {
+      unfurl = false;
+    }
     if (!reduceMotion) step();
     else {
       const x = anchorX();
@@ -378,6 +395,69 @@
   });
   window.addEventListener("resize", sizeCanvas);
   new ResizeObserver(() => rebuild()).observe(document.body);
+
+  /* ---------- Halatı tutup sallama ---------- */
+
+  const finePointer = window.matchMedia("(pointer: fine)").matches;
+  const GRAB_RANGE = 46;
+
+  const nearRope = (clientX, clientY) => {
+    const p = pointAtY(clientY + window.scrollY);
+    return Math.abs(clientX - p.x) < GRAB_RANGE;
+  };
+
+  if (finePointer) {
+    window.addEventListener("pointermove", (event) => {
+      if (grab.active) {
+        grab.x = event.clientX;
+        grab.y = event.clientY + window.scrollY;
+        return;
+      }
+      document.body.classList.toggle("is-rope-near", nearRope(event.clientX, event.clientY));
+    });
+
+    window.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0 || !nearRope(event.clientX, event.clientY)) return;
+      grab.active = true;
+      grab.x = event.clientX;
+      grab.y = event.clientY + window.scrollY;
+      document.body.classList.add("is-rope-held");
+    });
+
+    const release = () => {
+      grab.active = false;
+      document.body.classList.remove("is-rope-held");
+    };
+
+    window.addEventListener("pointerup", release);
+    window.addEventListener("pointercancel", release);
+    window.addEventListener("blur", release);
+
+    // Çift tık: ipe sert bir savurma.
+    window.addEventListener("dblclick", (event) => {
+      if (!nearRope(event.clientX, event.clientY)) return;
+      const at = event.clientY + window.scrollY;
+      points.forEach((p) => {
+        const near = 1 - Math.min(Math.abs(p.y - at) / 320, 1);
+        if (near > 0) p.x += near * 26;
+      });
+    });
+  }
+
+  /* ---------- Dağcı figürü için ip erişimi ---------- */
+
+  window.MAGNUM_ROPE = {
+    pointAt: (pageY) => {
+      const p = pointAtY(pageY);
+      return { x: p.x, y: p.y };
+    },
+    angleAt: (pageY) => {
+      const a = pointAtY(pageY - 26);
+      const b = pointAtY(pageY + 26);
+      return (Math.atan2(b.x - a.x, b.y - a.y) * -180) / Math.PI;
+    },
+    isReady: () => points.length > 2 && !unfurl,
+  };
 
   sizeCanvas();
   requestAnimationFrame(tick);

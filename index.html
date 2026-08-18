@@ -72,6 +72,7 @@
             <div class="nav-drop-menu" id="hakkinda-menu">
               <a href="#hakkimizda">Magnum Works</a>
               <a href="#sertifikalar">Sertifikalar ve markalar</a>
+              <a href="#donanim">Donanım</a>
               <a href="#ekip">Ekibimiz</a>
             </div>
           </div>
@@ -85,8 +86,34 @@
 
     <aside class="rail" aria-hidden="true">
       <span class="rail-depth mono">İniş <b data-depth>0</b>%</span>
+      <div class="rail-gauge">
+        <span class="rail-fill" data-rail-fill></span>
+        <span class="rail-cursor" data-rail-cursor></span>
+      </div>
       <ol class="rail-marks" data-rail></ol>
     </aside>
+
+    <div class="climber" data-climber aria-hidden="true">
+      <svg viewBox="0 0 46 60" width="46" height="60">
+        <!-- inici ve ipe bağlı kol -->
+        <path class="gear" d="M2 20h7M2 26h7" />
+        <rect class="gear" x="5" y="18" width="7" height="11" rx="2" />
+        <path d="M12 23L18 25" />
+        <!-- gövde -->
+        <circle class="helmet" cx="22" cy="14" r="6.4" />
+        <path class="visor" d="M27 13.2h2.6" />
+        <path d="M22 20.5V33" />
+        <rect class="harness" x="16.5" y="31" width="11" height="6" rx="1.6" />
+        <!-- serbest kol -->
+        <path d="M22.5 24.5L31 30" />
+        <!-- bacaklar -->
+        <g class="legs">
+          <path d="M20 37L31 42L29 52" />
+          <path d="M25 37L34 39L33 49" />
+          <path class="boot" d="M27 52.5h5M31 49.5h5" />
+        </g>
+      </svg>
+    </div>
 
     <main id="ust">
       <section class="hero">
@@ -141,7 +168,8 @@
             <i aria-hidden="true"></i>
             Aşağı
           </a>
-          <span>19 uzmanlık alanı · 39+ kurum referansı</span>
+          <span class="rope-hint">Soldaki halatı tutup sallayın · çift tıkla savurun</span>
+          <span class="hide-sm">19 uzmanlık alanı · 39+ kurum referansı</span>
         </div>
       </section>
 
@@ -476,6 +504,91 @@
               height="200"
             />
           </figure>
+        </div>
+      </section>
+
+      <section class="sec gear" id="donanim">
+        <div class="shell">
+          <div class="sec-head">
+            <div data-reveal>
+              <p class="sec-kicker mono">Donanım</p>
+              <h2>Sahaya inen takım</h2>
+            </div>
+            <p class="lede" data-reveal style="--d: 120ms">
+              Her parça CE / EN sertifikalı ve kullanım ömrü kayıtlı. Kişisel koruyucu donanım her iş
+              öncesi tek tek kontrol edilir; şüpheli parça sahaya inmez.
+            </p>
+          </div>
+
+          <div class="gear-grid">
+            <article data-reveal>
+              <svg viewBox="0 0 80 80" aria-hidden="true">
+                <path d="M14 48a26 26 0 0 1 52 0" />
+                <path d="M9 48h62" />
+                <path class="accent" d="M28 52v7a12 12 0 0 0 24 0v-7" />
+                <path class="fine" d="M40 22v26M26 28l6 20M54 28l-6 20" />
+              </svg>
+              <h3>Kask</h3>
+              <p>Yüksekten düşen parça ve çarpmaya karşı; çene bağlantılı, EN 12492.</p>
+            </article>
+
+            <article data-reveal style="--d: 70ms">
+              <svg viewBox="0 0 80 80" aria-hidden="true">
+                <path d="M20 24h40l-5 15H25z" />
+                <circle class="accent" cx="40" cy="31" r="4.5" />
+                <path class="accent" d="M29 39l-6 19M51 39l6 19" />
+                <path d="M21 58a9 9 0 0 0 15 0M44 58a9 9 0 0 0 15 0" />
+                <path class="fine" d="M25 31h30" />
+              </svg>
+              <h3>Paraşüt tipi emniyet kemeri</h3>
+              <p>Yük bel ve bacaklara dağıtılır; iş ve emniyet hattı ayrı halkalara bağlanır.</p>
+            </article>
+
+            <article data-reveal style="--d: 140ms">
+              <svg viewBox="0 0 80 80" aria-hidden="true">
+                <rect x="25" y="21" width="30" height="38" rx="7" />
+                <circle cx="35" cy="33" r="5" />
+                <circle cx="46" cy="48" r="5" />
+                <path class="accent" d="M15 12c15 7 21 17 19 31-2 14 5 21 17 23" />
+                <path class="fine" d="M31 44h18" />
+              </svg>
+              <h3>İnici</h3>
+              <p>Kontrollü iniş ve durma. Elden bırakıldığında kilitlenen tip tercih edilir.</p>
+            </article>
+
+            <article data-reveal style="--d: 210ms">
+              <svg viewBox="0 0 80 80" aria-hidden="true">
+                <path d="M31 16h13v41H31z" />
+                <path class="accent" d="M44 22c11 3 15 11 12 22" />
+                <circle cx="37" cy="30" r="4" />
+                <path d="M26 57c0 8 7 13 15 13" />
+                <path class="fine" d="M34 40h8" />
+              </svg>
+              <h3>Yükselici (jumar)</h3>
+              <p>Hat üzerinde tek yöne kayar, ters yönde kilitlenir; çıkış ve kurtarmada kullanılır.</p>
+            </article>
+
+            <article data-reveal style="--d: 280ms">
+              <svg viewBox="0 0 80 80" aria-hidden="true">
+                <rect x="27" y="11" width="26" height="58" rx="13" />
+                <path class="accent" d="M27 27l26 9" />
+                <path class="fine" d="M40 11v58" />
+                <circle class="accent" cx="40" cy="22" r="2.5" />
+              </svg>
+              <h3>Karabina</h3>
+              <p>Vidalı veya otomatik kilitli; kırılma yükü gövdesine basılı, kayıt altında.</p>
+            </article>
+
+            <article data-reveal style="--d: 350ms">
+              <svg viewBox="0 0 80 80" aria-hidden="true">
+                <path class="fine" d="M10 26c8-13 20-13 28 0s20 13 28 0" />
+                <path class="accent" d="M10 40c8-13 20-13 28 0s20 13 28 0" />
+                <path d="M10 54c8-13 20-13 28 0s20 13 28 0" />
+              </svg>
+              <h3>Kernmantel halat</h3>
+              <p>Çekirdek ve kılıf yapısı. Çift bağımsız hat kurulur: biri iş, biri emniyet.</p>
+            </article>
+          </div>
         </div>
       </section>
 

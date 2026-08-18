@@ -78,6 +78,9 @@ const heroMedia = document.querySelector(".hero-media img");
 const depthOut = document.querySelector("[data-depth]");
 const railList = document.querySelector("[data-rail]");
 
+const railFill = document.querySelector("[data-rail-fill]");
+const railCursor = document.querySelector("[data-rail-cursor]");
+
 const railSections = [
   ["nedir", "Nedir"],
   ["hizmetler", "Hizmetler"],
@@ -85,6 +88,7 @@ const railSections = [
   ["isler", "İşler"],
   ["referanslar", "Referanslar"],
   ["hakkimizda", "Hakkımızda"],
+  ["donanim", "Donanım"],
   ["sss", "SSS"],
   ["iletisim", "İletişim"],
 ].filter(([id]) => document.getElementById(id));
@@ -114,6 +118,8 @@ const onScroll = () => {
   progress?.style.setProperty("--progress", String(ratio));
 
   if (depthOut) depthOut.textContent = String(Math.round(ratio * 100));
+  railFill?.style.setProperty("--p", String(ratio));
+  railCursor?.style.setProperty("--p", String(ratio));
 
   if (!reduceMotion && heroMedia && y <= window.innerHeight * 1.2) {
     heroMedia.style.transform = `translate3d(0, ${(y * 0.22).toFixed(1)}px, 0) scale(1.08)`;
@@ -363,6 +369,41 @@ if (ring && !reduceMotion && finePointer) {
     el.addEventListener("pointerenter", () => ring.classList.add("is-big"));
     el.addEventListener("pointerleave", () => ring.classList.remove("is-big"));
   });
+}
+
+/* ---------- İpte inen dağcı ---------- */
+
+const climber = document.querySelector("[data-climber]");
+
+if (climber) {
+  const anchorRatio = 0.56;
+  let lastY = window.scrollY;
+  let moving = 0;
+
+  const ride = () => {
+    const rope = window.MAGNUM_ROPE;
+
+    if (rope && rope.isReady()) {
+      const viewY = window.innerHeight * anchorRatio;
+      const pageY = window.scrollY + viewY;
+      const point = rope.pointAt(pageY);
+      const angle = reduceMotion ? 0 : Math.max(-24, Math.min(24, rope.angleAt(pageY)));
+
+      climber.style.transform = `translate3d(${(point.x - 7).toFixed(1)}px, ${(viewY - 24).toFixed(
+        1
+      )}px, 0) rotate(${angle.toFixed(1)}deg)`;
+      climber.classList.toggle("is-on", window.scrollY > 60);
+
+      const delta = Math.abs(window.scrollY - lastY);
+      lastY = window.scrollY;
+      moving = delta > 1.5 ? 26 : Math.max(moving - 1, 0);
+      climber.classList.toggle("is-moving", moving > 0);
+    }
+
+    requestAnimationFrame(ride);
+  };
+
+  requestAnimationFrame(ride);
 }
 
 /* ---------- İletişim bölümünde imleç ışıması ---------- */
